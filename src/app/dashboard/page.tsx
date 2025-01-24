@@ -1,8 +1,10 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Brain, Trophy, TrendingUp, ShieldCheck, Trash2, UserMinus } from "lucide-react"
+import { Brain, Trophy, TrendingUp, ShieldCheck, Trash2, UserMinus, Clock } from "lucide-react"
 import { ProgressBar } from "@/components/progress-bar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { DailyCheckIn } from "@/components/daily-check-in"
+import { BehaviorInsights } from "@/components/behavior-insights"
 
 // Mock data for demonstration
 const userData = {
@@ -12,8 +14,8 @@ const userData = {
   streakDays: 7,
   appsBlocked: 5,
   websitesBlocked: 8,
-  appsDeleted: 3,
   accountsDeleted: 2,
+  screenTimeReduced: 120, // in minutes
 }
 
 export default function Dashboard() {
@@ -23,7 +25,7 @@ export default function Dashboard() {
         <div className="flex justify-center mb-6">
           <Brain className="h-12 w-12 text-blue-600" />
         </div>
-        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">Your Digital Detox Progress</h2>
+        <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">Your Digital Detox Journey</h2>
 
         <Card className="mb-8">
           <CardHeader>
@@ -47,12 +49,14 @@ export default function Dashboard() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Apps Blocked</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
+              <CardTitle className="text-sm font-medium">Screen Time Reduced</CardTitle>
+              <Clock className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{userData.appsBlocked}</div>
-              <p className="text-xs text-muted-foreground">You've successfully limited access to distracting apps.</p>
+              <div className="text-2xl font-bold">{userData.screenTimeReduced} minutes</div>
+              <p className="text-xs text-muted-foreground">
+                That's {Math.round(userData.screenTimeReduced / 60)} hours reclaimed!
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -61,25 +65,13 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Websites Blocked</CardTitle>
+              <CardTitle className="text-sm font-medium">Apps & Websites Blocked</CardTitle>
               <ShieldCheck className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{userData.websitesBlocked}</div>
+              <div className="text-2xl font-bold">{userData.appsBlocked + userData.websitesBlocked}</div>
               <p className="text-xs text-muted-foreground">
-                You've successfully blocked distracting websites, reclaiming your focus.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Apps Deleted</CardTitle>
-              <Trash2 className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{userData.appsDeleted}</div>
-              <p className="text-xs text-muted-foreground">
-                By deleting these apps, you've removed major sources of distraction.
+                You've successfully limited access to distracting content.
               </p>
             </CardContent>
           </Card>
@@ -95,6 +87,23 @@ export default function Dashboard() {
               </p>
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Daily Challenges Completed</CardTitle>
+              <TrendingUp className="h-4 w-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{userData.currentDay}</div>
+              <p className="text-xs text-muted-foreground">
+                Each day brings you closer to your digital wellbeing goals.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-8">
+          <DailyCheckIn />
+          <BehaviorInsights />
         </div>
 
         <Card>
@@ -104,14 +113,16 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button className="w-full justify-start" variant="outline">
-              Log Today's Progress
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
               View Detailed Stats
             </Button>
+            <Link href="/harmful-websites" className="w-full">
+              <Button className="w-full justify-start" variant="outline">
+                Explore Harmful Websites Database
+              </Button>
+            </Link>
             <Link href="/profile" className="w-full">
               <Button className="w-full justify-start" variant="outline">
-                Update Profile
+                Update Profile & Settings
               </Button>
             </Link>
           </CardContent>
