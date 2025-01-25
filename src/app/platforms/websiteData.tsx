@@ -12,15 +12,29 @@ import {
   LucideIcon,
 } from 'lucide-react';
 
+export type PlatformName =
+  | 'Instagram'
+  | 'TikTok'
+  | 'Twitter (X)'
+  | 'Facebook'
+  | 'YouTube'
+  | 'Snapchat'
+  | 'LinkedIn'
+  | 'Pinterest'
+  | 'Reddit'
+  | 'Mastodon'
+  | 'Threads';
+
 export type Website = {
-  name: string;
+  name: PlatformName;
   icon: LucideIcon;
   harmfulEffects: string[];
   safeUsage: string[];
   recommendation: string;
   badge: string;
 };
-export const websites: Website[] = [
+
+const unOrderedWebsites: Website[] = [
   {
     name: 'Instagram',
     icon: Image, // Generic icon
@@ -264,3 +278,7 @@ export const websites: Website[] = [
     badge: 'Avoid',
   },
 ];
+
+export const websites = unOrderedWebsites.sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
