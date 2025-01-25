@@ -12,7 +12,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 
-interface IntrusiveFeature {
+export interface IntrusiveFeature {
   name: string;
   icon: React.ElementType;
   description: string;
