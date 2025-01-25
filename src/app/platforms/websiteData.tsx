@@ -12,14 +12,28 @@ import {
   LucideIcon,
 } from 'lucide-react';
 
+export type PlatformName =
+  | 'Instagram'
+  | 'TikTok'
+  | 'Twitter (X)'
+  | 'Facebook'
+  | 'YouTube'
+  | 'Snapchat'
+  | 'LinkedIn'
+  | 'Pinterest'
+  | 'Reddit'
+  | 'Mastodon'
+  | 'Threads';
+
 export type Website = {
-  name: string;
+  name: PlatformName;
   icon: LucideIcon;
   harmfulEffects: string[];
   safeUsage: string[];
   recommendation: string;
   badge: string;
 };
+
 const unOrderedWebsites: Website[] = [
   {
     name: 'Instagram',
