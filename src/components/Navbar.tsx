@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Brain } from "lucide-react"
+import { Brain, AlertTriangle } from "lucide-react"
 import { useAuthStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 
@@ -34,6 +34,12 @@ export function Navbar() {
                   Harmful Websites
                 </Link>
                 <Link
+                  href="/intrusive-app-detection"
+                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Intrusive App Detection
+                </Link>
+                <Link
                   href="/profile"
                   className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                 >
@@ -50,6 +56,9 @@ export function Navbar() {
                 </Link>
                 <Link href="/signup">
                   <Button variant="outline">Sign Up</Button>
+                </Link>
+                <Link href="/intrusive-app-detection">
+                  <Button variant="ghost">Intrusive App Detection</Button>
                 </Link>
               </>
             )}
