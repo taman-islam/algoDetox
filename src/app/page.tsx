@@ -194,10 +194,11 @@ export default function Home() {
               <Brain className='h-8 w-8 text-blue-400' />
               <span className='ml-2 text-xl font-bold'>AlgoDetox</span>
             </div>
+            <Links />
             {/* TODO: Add links <Links /> */}
-            <Copyright />
           </div>
         </div>
+        <Copyright />
       </footer>
     </div>
   );
@@ -279,19 +280,16 @@ const SuccessStories = () => {
   );
 };
 
-const Links = () => {
+const Links = () => (
   <div className='flex space-x-6'>
-    <Link href='#' className='hover:text-blue-400'>
+    <Link href='/privacy-notice' className='hover:text-blue-400'>
       Privacy Policy
     </Link>
-    <Link href='#' className='hover:text-blue-400'>
+    <Link href='/terms-of-service' className='hover:text-blue-400'>
       Terms of Service
     </Link>
-    <Link href='#' className='hover:text-blue-400'>
-      Contact Us
-    </Link>
-  </div>;
-};
+  </div>
+);
 
 const JoinTheMission = () => {
   return (
