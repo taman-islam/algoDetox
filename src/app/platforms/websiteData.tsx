@@ -20,7 +20,7 @@ export type Website = {
   recommendation: string;
   badge: string;
 };
-export const websites: Website[] = [
+const unOrderedWebsites: Website[] = [
   {
     name: 'Instagram',
     icon: Image, // Generic icon
@@ -264,3 +264,7 @@ export const websites: Website[] = [
     badge: 'Avoid',
   },
 ];
+
+export const websites = unOrderedWebsites.sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
