@@ -107,7 +107,7 @@ export default function Logs() {
                   <SelectValue placeholder='Select an app' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value=''>All Apps</SelectItem>
+                  <SelectItem value={''}>All Apps</SelectItem>
                   {uniqueApps.map((app) => (
                     <SelectItem key={app} value={app}>
                       {app}
