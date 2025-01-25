@@ -6,7 +6,7 @@ import { Navbar } from "@/components/Navbar"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "algoDetox",
+  title: "AlgoDetox",
   description: "Break free from the algorithm and reclaim your focus",
 }
 
