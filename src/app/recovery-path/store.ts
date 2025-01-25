@@ -2,10 +2,27 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { PlatformName } from '../platforms/websiteData';
 
+export type RecoveryPathStep =
+  | 'What'
+  | 'Why'
+  | 'How Much'
+  | 'Consequences'
+  | 'Alternatives'
+  | 'Conclusion';
+
+export const STEPS: RecoveryPathStep[] = [
+  'What',
+  'Why',
+  'How Much',
+  'Consequences',
+  'Alternatives',
+  'Conclusion',
+];
+
 type RecoveryPathState = {
-  activeStep: number;
+  activeStep: RecoveryPathStep;
   selectedPlatforms: PlatformName[];
-  setActiveStep: (steps: number) => void;
+  setActiveStep: (step: RecoveryPathStep) => void;
   setSelectedPlatforms: (platforms: PlatformName[]) => void;
   addSelectedPlatform: (platform: PlatformName) => void;
   removeSelectedPlatform: (platform: PlatformName) => void;
@@ -16,10 +33,13 @@ type RecoveryPathState = {
 export const useRecoveryPathStore = create<RecoveryPathState>()(
   persist(
     (set, get) => ({
-      activeStep: 1,
+      activeStep: 'What',
       selectedPlatforms: [],
-      setActiveStep: (steps) => set({ activeStep: steps }),
-      setSelectedPlatforms: (platforms) =>
+      setActiveStep: (step: RecoveryPathStep) => {
+        console.log('hit:: ', step);
+        set({ activeStep: step });
+      },
+      setSelectedPlatforms: (platforms: PlatformName[]) =>
         set({ selectedPlatforms: platforms }),
       addSelectedPlatform: (platform: PlatformName) =>
         set((state) => ({

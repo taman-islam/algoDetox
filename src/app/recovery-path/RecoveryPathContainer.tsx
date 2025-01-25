@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { websites } from '../platforms/websiteData';
-import { useRecoveryPathStore } from './store';
+import { STEPS, useRecoveryPathStore } from './store';
 import { PlatformName } from '../platforms/websiteData';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -17,17 +17,18 @@ export function RecoveryPathContainer() {
     removeSelectedPlatform,
     clearSelectedPlatforms,
     toggleSelectedPlatform,
-  } = useRecoveryPathStore(
-    useShallow((state) => ({
-      activeStep: state.activeStep,
-      setActiveStep: state.setActiveStep,
-      selectedPlatforms: state.selectedPlatforms,
-      addSelectedPlatform: state.addSelectedPlatform,
-      removeSelectedPlatform: state.removeSelectedPlatform,
-      clearSelectedPlatforms: state.clearSelectedPlatforms,
-      toggleSelectedPlatform: state.toggleSelectedPlatform,
-    })),
-  );
+  } = useRecoveryPathStore();
+  // useShallow((state) => ({
+  //   activeStep: state.activeStep,
+  //   setActiveStep: state.setActiveStep,
+  //   selectedPlatforms: state.selectedPlatforms,
+  //   addSelectedPlatform: state.addSelectedPlatform,
+  //   removeSelectedPlatform: state.removeSelectedPlatform,
+  //   clearSelectedPlatforms: state.clearSelectedPlatforms,
+  //   toggleSelectedPlatform: state.toggleSelectedPlatform,
+  // })),
+
+  console.log(useRecoveryPathStore());
 
   const [usageData, setUsageData] = useState<{
     platforms: PlatformName[];
@@ -53,13 +54,16 @@ export function RecoveryPathContainer() {
           <div className='bg-gray-200 rounded-full h-2'>
             <div
               className='bg-blue-600 rounded-full h-2'
-              style={{ width: `${(activeStep / 5) * 100}%` }}
+              style={{
+                width: `${
+                  ((STEPS.indexOf(activeStep) + 1) * 100) / STEPS.length
+                }%`,
+              }}
             ></div>
           </div>
         </div>
-
         {/* Step 1: What Are You Using? */}
-        {activeStep === 1 && (
+        {activeStep === 'What' && (
           <div className='text-center'>
             <h2 className='text-2xl font-bold text-gray-900 mb-4'>
               What Are You Using?
@@ -91,9 +95,8 @@ export function RecoveryPathContainer() {
             </div>
           </div>
         )}
-
         {/* Step 2: Why Are You Using? */}
-        {activeStep === 2 && (
+        {activeStep === 'Why' && (
           <div className='text-center'>
             <h2 className='text-2xl font-bold text-gray-900 mb-4'>
               Why Are You Using?
@@ -132,9 +135,8 @@ export function RecoveryPathContainer() {
             </div>
           </div>
         )}
-
         {/* Step 3: How Much Are You Using? */}
-        {activeStep === 3 && (
+        {activeStep === 'How Much' && (
           <div className='text-center'>
             <h2 className='text-2xl font-bold text-gray-900 mb-4'>
               How Much Are You Using?
@@ -171,9 +173,8 @@ export function RecoveryPathContainer() {
             </div>
           </div>
         )}
-
         {/* Step 4: What Are the Consequences? */}
-        {activeStep === 4 && (
+        {activeStep === 'Consequences' && (
           <div className='text-center'>
             <h2 className='text-2xl font-bold text-gray-900 mb-4'>
               What Are the Consequences?
@@ -199,7 +200,6 @@ export function RecoveryPathContainer() {
                 'Reduced Self-Confidence',
                 'Reduced Self-Awareness',
                 'Reduced Self-Control',
-                'Reduced Self-Awareness',
               ].map((consequence) => (
                 <Button
                   key={consequence}
@@ -223,9 +223,8 @@ export function RecoveryPathContainer() {
             </div>
           </div>
         )}
-
         {/* Step 5: Healthier Alternatives */}
-        {activeStep === 5 && (
+        {activeStep === 'Alternatives' && (
           <div className='text-center'>
             <h2 className='text-2xl font-bold text-gray-900 mb-4'>
               Healthier Alternatives
@@ -274,19 +273,26 @@ export function RecoveryPathContainer() {
             </div>
           </div>
         )}
-
         {/* Navigation Buttons */}
         <div className='mt-8 flex justify-between'>
-          {activeStep > 1 && (
+          {activeStep != STEPS[0] && (
             <Button
               variant='outline'
-              onClick={() => setActiveStep(activeStep - 1)}
+              onClick={() =>
+                setActiveStep(STEPS[STEPS.indexOf(activeStep) - 1])
+              }
             >
               Back
             </Button>
           )}
-          {activeStep < 5 ? (
-            <Button onClick={() => setActiveStep(activeStep + 1)}>Next</Button>
+          {activeStep != STEPS[STEPS.length - 1] ? (
+            <Button
+              onClick={() =>
+                setActiveStep(STEPS[STEPS.indexOf(activeStep) + 1])
+              }
+            >
+              Next
+            </Button>
           ) : (
             <Link href='/personalized-plan'>
               <Button>Get Your Personalized Plan</Button>
