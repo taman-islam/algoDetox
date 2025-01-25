@@ -17,16 +17,17 @@ export function RecoveryPathContainer() {
     removeSelectedPlatform,
     clearSelectedPlatforms,
     toggleSelectedPlatform,
-  } = useRecoveryPathStore();
-  // useShallow((state) => ({
-  //   activeStep: state.activeStep,
-  //   setActiveStep: state.setActiveStep,
-  //   selectedPlatforms: state.selectedPlatforms,
-  //   addSelectedPlatform: state.addSelectedPlatform,
-  //   removeSelectedPlatform: state.removeSelectedPlatform,
-  //   clearSelectedPlatforms: state.clearSelectedPlatforms,
-  //   toggleSelectedPlatform: state.toggleSelectedPlatform,
-  // })),
+  } = useRecoveryPathStore(
+    useShallow((state) => ({
+      activeStep: state.activeStep,
+      setActiveStep: state.setActiveStep,
+      selectedPlatforms: state.selectedPlatforms,
+      addSelectedPlatform: state.addSelectedPlatform,
+      removeSelectedPlatform: state.removeSelectedPlatform,
+      clearSelectedPlatforms: state.clearSelectedPlatforms,
+      toggleSelectedPlatform: state.toggleSelectedPlatform,
+    })),
+  );
 
   console.log(useRecoveryPathStore());
 
