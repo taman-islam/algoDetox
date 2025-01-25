@@ -70,11 +70,11 @@ export default function Onboarding() {
         return (
           <Card>
             <CardHeader>
-              <CardTitle>Welcome to algoDetox</CardTitle>
+              <CardTitle>Welcome to AlgoDetox</CardTitle>
               <CardDescription>Let's start your journey to digital wellbeing</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p>algoDetox helps you manage screen addiction through daily logging and reflection.</p>
+              <p>AlgoDetox helps you manage screen addiction through daily logging and reflection.</p>
               <div className="flex items-center justify-center">
                 <img
                   src="/placeholder.svg?height=200&width=300"
@@ -210,7 +210,7 @@ export default function Onboarding() {
         <div className="flex justify-center">
           <Brain className="h-12 w-12 text-blue-600" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">algoDetox Onboarding</h2>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">AlgoDetox Onboarding</h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

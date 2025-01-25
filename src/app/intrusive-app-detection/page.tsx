@@ -11,7 +11,7 @@ export const metadata = {
     description:
       'Learn how to identify apps that may be intruding on your digital well-being and focus.',
     type: 'website',
-    url: 'https://algodetox.com/intrusive-app-detection',
+    url: 'https://AlgoDetox.com/intrusive-app-detection',
     image: '/og-image.png', // Make sure to add an appropriate Open Graph image
   },
 };
