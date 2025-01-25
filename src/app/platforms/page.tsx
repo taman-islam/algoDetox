@@ -1,16 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, ShieldCheck } from 'lucide-react';
 import { CollapsibleDisclaimer } from '@/components/collapsible-disclaimer';
-import { Website, websites } from './websiteData';
-import { useState } from 'react';
+import { type Website, websites } from './websiteData';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export default function Platforms() {
   const [selectedPlatform, setSelectedPlatform] = useState<string>(
     websites[0].name,
   );
+
   return (
     <div className='min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-4xl mx-auto'>
@@ -24,16 +32,51 @@ export default function Platforms() {
         <p className='text-sm text-gray-500 text-center mb-8'>
           Note: Icons used are representative and not official brand logos.
         </p>
-        <select
-          value={selectedPlatform}
-          onChange={(e) => setSelectedPlatform(e.target.value)}
-        >
-          {websites.map((site) => (
-            <option key={site.name} value={site.name}>
-              {site.name}
-            </option>
-          ))}
-        </select>
+
+        <div className='mb-8'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>
+            Select a platform to view details:
+          </p>
+          <Select value={selectedPlatform} onValueChange={setSelectedPlatform}>
+            <SelectTrigger
+              className='w-full'
+              style={{
+                color:
+                  websites.find((site) => site.name === selectedPlatform)
+                    ?.badge === 'Avoid'
+                    ? 'rgb(239, 68, 68)' // text-red-500
+                    : websites.find((site) => site.name === selectedPlatform)
+                        ?.badge === 'Use with caution'
+                    ? 'rgb(249, 115, 22)' // text-orange-500
+                    : 'rgb(234, 179, 8)', // text-yellow-500
+              }}
+            >
+              <SelectValue placeholder='Select a platform' />
+            </SelectTrigger>
+            <SelectContent>
+              {websites.map((site) => (
+                <SelectItem key={site.name} value={site.name}>
+                  <div className='flex items-center'>
+                    <site.icon className='h-5 w-5 mr-2 text-gray-500' />
+                    <span
+                      className={`
+                        ${
+                          site.badge === 'Avoid'
+                            ? 'text-red-500'
+                            : site.badge === 'Use with caution'
+                            ? 'text-orange-500'
+                            : 'text-yellow-500'
+                        }
+                      `}
+                    >
+                      {site.name}
+                    </span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className='space-y-12'>
           {selectedPlatform &&
@@ -61,14 +104,14 @@ const PlatformCard = ({ site }: { site: Website }) => {
           <Badge
             variant='outline'
             className={`
-          ${
-            site.badge === 'Avoid'
-              ? 'text-red-500 border-red-500'
-              : site.badge === 'Use with caution'
-              ? 'text-orange-500 border-orange-500'
-              : 'text-yellow-500 border-yellow-500'
-          }
-        `}
+              ${
+                site.badge === 'Avoid'
+                  ? 'text-red-500 border-red-500'
+                  : site.badge === 'Use with caution'
+                  ? 'text-orange-500 border-orange-500'
+                  : 'text-yellow-500 border-yellow-500'
+              }
+            `}
           >
             {site.badge || 'Use mindfully'}
           </Badge>

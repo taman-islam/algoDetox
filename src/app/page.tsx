@@ -65,16 +65,14 @@ export default function Home() {
             </div>
             <div className='flex flex-col items-center text-center'>
               <Lock className='h-12 w-12 text-blue-600 mb-4' />{' '}
-              {/* Add Lock icon import */}
               <h3 className='text-xl font-semibold mb-2'>No Tracking, Ever</h3>
               <p className='text-gray-600'>
-                We don’t track you or use your data. Your privacy is our
-                priority.
+                We don’t and will never show ads. Your privacy is our priority,
+                and we never track or sell your data.
               </p>
             </div>
             <div className='flex flex-col items-center text-center'>
               <Code className='h-12 w-12 text-blue-600 mb-4' />{' '}
-              {/* Add Code icon import */}
               <h3 className='text-xl font-semibold mb-2'>
                 Open Source Algorithms
               </h3>
@@ -306,7 +304,6 @@ const JoinTheMission = () => {
           {/* For Developers */}
           <div className='flex flex-col items-center text-center'>
             <Code className='h-12 w-12 text-blue-600 mb-4' />{' '}
-            {/* Add Code icon import */}
             <h3 className='text-xl font-semibold mb-2'>
               Developers: Build Responsibly
             </h3>
@@ -325,7 +322,6 @@ const JoinTheMission = () => {
           {/* Open Source Contributions */}
           <div className='flex flex-col items-center text-center'>
             <GitPullRequest className='h-12 w-12 text-blue-600 mb-4' />{' '}
-            {/* Add GitPullRequest icon import */}
             <h3 className='text-xl font-semibold mb-2'>
               Contribute to Our Open Source Project
             </h3>
@@ -336,15 +332,15 @@ const JoinTheMission = () => {
             <Button
               variant='outline'
               className='text-blue-600 border-blue-600 hover:bg-blue-50'
+              disabled
             >
-              View on GitHub
+              Github link coming soon
             </Button>
           </div>
 
           {/* For Mental Health Professionals */}
           <div className='flex flex-col items-center text-center'>
             <HeartHandshake className='h-12 w-12 text-blue-600 mb-4' />{' '}
-            {/* Add HeartHandshake icon import */}
             <h3 className='text-xl font-semibold mb-2'>
               Mental Health Professionals: Join Us
             </h3>
