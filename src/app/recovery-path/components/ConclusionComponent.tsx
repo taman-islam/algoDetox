@@ -2,6 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useRecoveryPathStore } from '../store/uxStore';
 import { Button } from '@/components/ui/button';
 import { useUsageStore } from '../store/usageStore';
+import { PlatformName } from '@/app/platforms/websiteData';
 
 export const ConclusionComponent = () => {
   const { selectedPlatforms, results } = useRecoveryPathStore(
@@ -10,15 +11,20 @@ export const ConclusionComponent = () => {
       results: state.results,
     })),
   );
-  const { usageDataByPlatform } = useUsageStore(
-    useShallow((state) => ({
-      usageDataByPlatform: state.usageDataByPlatform,
-    })),
-  );
+  const { usageDataByPlatform, isPlatformUseful, setIsPlatformUseful } =
+    useUsageStore(
+      useShallow((state) => ({
+        usageDataByPlatform: state.usageDataByPlatform,
+        isPlatformUseful: state.isPlatformUseful,
+        setIsPlatformUseful: state.setIsPlatformUseful,
+      })),
+    );
 
-  const updatePlatformUsefulness = (platform: string, usefulness: boolean) => {
-    // TODO(Taman): Update the usage data
-    console.log('updatePlatformUsefulness', platform, usefulness);
+  const updatePlatformUsefulness = (
+    platform: PlatformName,
+    usefulness: boolean,
+  ) => {
+    setIsPlatformUseful(platform, usefulness);
   };
 
   return (
@@ -63,13 +69,13 @@ export const ConclusionComponent = () => {
             </p>
             <div className='flex justify-center gap-4'>
               <Button
-                variant='outline'
+                variant={isPlatformUseful[platform] ? 'default' : 'outline'}
                 onClick={() => updatePlatformUsefulness(platform, true)}
               >
                 Yes
               </Button>
               <Button
-                variant='outline'
+                variant={isPlatformUseful[platform] ? 'outline' : 'default'}
                 onClick={() => updatePlatformUsefulness(platform, false)}
               >
                 No
