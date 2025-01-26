@@ -2,7 +2,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useRecoveryPathStore } from '../store/uxStore';
 import { Button } from '@/components/ui/button';
 import { useUsageStore } from '../store/usageStore';
-import { PlatformName } from '@/app/platforms/websiteData';
+import { PlatformName } from '@/app/(subroutes)/platforms/websiteData';
 
 export const ConclusionComponent = () => {
   const { selectedPlatforms, results } = useRecoveryPathStore(

@@ -1,4 +1,4 @@
-import { PlatformName } from '@/app/platforms/websiteData';
+import { PlatformName } from '@/app/(subroutes)/platforms/websiteData';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
