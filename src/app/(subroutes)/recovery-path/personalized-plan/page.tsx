@@ -148,6 +148,7 @@ export default function PersonalizedPlanPage() {
           </div>
         </div>
       </section>
+      
 
       <RecommendedActions />
 
@@ -246,9 +247,7 @@ const RecommendedActions = () => {
               <div className='text-center'>
                 <a
                   href={DetoxActionsByLevel[rec.level].cta.href}
-                  className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-${
-                    DetoxActionsByLevel[rec.level].color
-                  }-600 hover:bg-${DetoxActionsByLevel[rec.level].color}-700`}
+                  className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700`}
                 >
                   {DetoxActionsByLevel[rec.level].cta.label}
                 </a>
