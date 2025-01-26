@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
 import { websites } from '../../platforms/websiteData';
-import { useRecoveryPathStore } from '../store';
+import { useRecoveryPathStore } from '../store/uxStore';
 
 export const What = () => {
   const { selectedPlatforms, toggleSelectedPlatform } = useRecoveryPathStore(

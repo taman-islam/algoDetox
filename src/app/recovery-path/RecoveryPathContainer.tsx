@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
-import { RecoveryPathStep, STEPS, useRecoveryPathStore } from './store';
+import { RecoveryPathStep, STEPS, useRecoveryPathStore } from './store/uxStore';
 import { Why } from './components/Why';
 import { What } from './components/What';
 import { HowMuch } from './components/HowMuch';
@@ -12,6 +12,7 @@ import { Alternatives } from './components/Alternatives';
 import { memo } from 'react';
 import { ResultsComponent } from './components/Results';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
+import { ConclusionComponent } from './components/ConclusionComponent';
 
 export function RecoveryPathContainer() {
   const { activeStep } = useRecoveryPathStore(
@@ -30,6 +31,7 @@ export function RecoveryPathContainer() {
         {activeStep === 'Results' && <ResultsComponent />}
         {activeStep === 'Consequences' && <Consequences />}
         {activeStep === 'Alternatives' && <Alternatives />}
+        {activeStep === 'Conclusion' && <ConclusionComponent />}
         <NavigationButtons />
       </div>
     </div>

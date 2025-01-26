@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
-import { PlatformName } from '../platforms/websiteData';
+import { persist } from 'zustand/middleware';
+import { PlatformName } from '../../platforms/websiteData';
 
 export const STEPS = [
   'What',
@@ -14,17 +14,8 @@ export const STEPS = [
 
 export type RecoveryPathStep = (typeof STEPS)[number];
 
-export type UsageData = {
-  reasons: string[];
-  frequency: string;
-  hoursPerDay: string;
-};
-
 type RecoveryPathState = {
   activeStep: RecoveryPathStep;
-  usageDataByPlatform: {
-    [key in PlatformName]?: UsageData;
-  };
   selectedPlatforms: PlatformName[];
   consequences: string[];
   alternatives: string[];
@@ -34,11 +25,7 @@ type RecoveryPathState = {
   setActiveStep: (step: RecoveryPathStep) => void;
   toggleSelectedPlatform: (platform: PlatformName) => void;
   setSelectedPlatforms: (platforms: PlatformName[]) => void;
-  updateUsageDataField: (
-    platform: PlatformName,
-    field: keyof UsageData,
-    value: string,
-  ) => void;
+
   updateConsequences: (consequence: string) => void;
   updateAlternatives: (alternative: string) => void;
   updateResults: (platform: PlatformName, result: string) => void;
@@ -65,20 +52,6 @@ export const useRecoveryPathStore = create<RecoveryPathState>()(
             ? state.selectedPlatforms.filter((p) => p !== platform)
             : [...state.selectedPlatforms, platform],
         })),
-      updateUsageDataField: (
-        platform: PlatformName,
-        field: keyof UsageData,
-        value: string,
-      ) =>
-        set((state) => ({
-          usageDataByPlatform: {
-            ...get().usageDataByPlatform,
-            [platform]: {
-              ...get().usageDataByPlatform[platform],
-              [field]: value,
-            },
-          },
-        })),
       updateConsequences: (consequence: string) =>
         set((state) => ({
           consequences: state.consequences.includes(consequence)
@@ -100,8 +73,18 @@ export const useRecoveryPathStore = create<RecoveryPathState>()(
         })),
     }),
     {
-      name: 'recovery-path',
-      storage: createJSONStorage(() => localStorage),
+      name: 'recovery-path-storage',
+      partialize: (state) => ({
+        activeStep: state.activeStep,
+        selectedPlatforms: state.selectedPlatforms,
+        consequences: state.consequences,
+        alternatives: state.alternatives,
+        results: state.results,
+      }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+        }
+      },
     },
   ),
 );
