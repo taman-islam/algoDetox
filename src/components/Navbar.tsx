@@ -1,9 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Brain, AlertTriangle } from 'lucide-react';
+import { Brain } from 'lucide-react';
 import { useAuthStore } from '@/lib/store';
-import { Button } from '@/components/ui/button';
 
 export function Navbar() {
   const { isLoggedIn, logout } = useAuthStore();
