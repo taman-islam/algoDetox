@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
 import { useRecoveryPathStore } from '../store/uxStore';
-import { PlatformName } from '@/app/platforms/websiteData';
+import { PlatformName } from '@/app/(subroutes)/platforms/websiteData';
 
 const RESULTS = [
   'Found a job',
