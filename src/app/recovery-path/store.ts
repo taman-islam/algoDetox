@@ -19,44 +19,78 @@ export const STEPS: RecoveryPathStep[] = [
   'Conclusion',
 ];
 
+export type UsageData = {
+  reasons: string[];
+  frequency: string;
+  hoursPerDay: string;
+};
+
 type RecoveryPathState = {
   activeStep: RecoveryPathStep;
+  usageDataByPlatform: {
+    [key in PlatformName]?: UsageData;
+  };
   selectedPlatforms: PlatformName[];
+  consequences: string[];
+  alternatives: string[];
   setActiveStep: (step: RecoveryPathStep) => void;
-  setSelectedPlatforms: (platforms: PlatformName[]) => void;
-  addSelectedPlatform: (platform: PlatformName) => void;
-  removeSelectedPlatform: (platform: PlatformName) => void;
-  clearSelectedPlatforms: () => void;
   toggleSelectedPlatform: (platform: PlatformName) => void;
+  setSelectedPlatforms: (platforms: PlatformName[]) => void;
+  updateUsageDataField: (
+    platform: PlatformName,
+    field: keyof UsageData,
+    value: string,
+  ) => void;
+  updateConsequences: (consequence: string) => void;
+  updateAlternatives: (alternative: string) => void;
 };
 
 export const useRecoveryPathStore = create<RecoveryPathState>()(
   persist(
     (set, get) => ({
-      activeStep: 'What',
+      activeStep: STEPS[0],
+      usageDataByPlatform: {},
       selectedPlatforms: [],
+      consequences: [],
+      alternatives: [],
+
       setActiveStep: (step: RecoveryPathStep) => {
-        console.log('hit:: ', step);
         set({ activeStep: step });
       },
       setSelectedPlatforms: (platforms: PlatformName[]) =>
         set({ selectedPlatforms: platforms }),
-      addSelectedPlatform: (platform: PlatformName) =>
-        set((state) => ({
-          selectedPlatforms: [...state.selectedPlatforms, platform],
-        })),
-      removeSelectedPlatform: (platform: PlatformName) =>
-        set((state) => ({
-          selectedPlatforms: state.selectedPlatforms.filter(
-            (p) => p !== platform,
-          ),
-        })),
-      clearSelectedPlatforms: () => set({ selectedPlatforms: [] }),
+
       toggleSelectedPlatform: (platform: PlatformName) =>
         set((state) => ({
           selectedPlatforms: state.selectedPlatforms.includes(platform)
             ? state.selectedPlatforms.filter((p) => p !== platform)
             : [...state.selectedPlatforms, platform],
+        })),
+      updateUsageDataField: (
+        platform: PlatformName,
+        field: keyof UsageData,
+        value: string,
+      ) =>
+        set((state) => ({
+          usageDataByPlatform: {
+            ...get().usageDataByPlatform,
+            [platform]: {
+              ...get().usageDataByPlatform[platform],
+              [field]: value,
+            },
+          },
+        })),
+      updateConsequences: (consequence: string) =>
+        set((state) => ({
+          consequences: state.consequences.includes(consequence)
+            ? state.consequences.filter((c) => c !== consequence)
+            : [...state.consequences, consequence],
+        })),
+      updateAlternatives: (alternative: string) =>
+        set((state) => ({
+          alternatives: state.alternatives.includes(alternative)
+            ? state.alternatives.filter((a) => a !== alternative)
+            : [...state.alternatives, alternative],
         })),
     }),
     {
