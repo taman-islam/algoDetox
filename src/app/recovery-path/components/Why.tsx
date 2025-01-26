@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
 import { PlatformName } from '../../platforms/websiteData';
-import { useRecoveryPathStore } from '../store';
+import { useRecoveryPathStore } from '../store/uxStore';
+import { useUsageStore } from '../store/usageStore';
 
 const reasons = [
   'Stay Connected',
@@ -35,12 +36,14 @@ export const Why = () => {
 };
 
 const WhyPerPlatform = ({ platform }: { platform: PlatformName }) => {
-  const { usageDataByPlatform, updateUsageDataField } = useRecoveryPathStore(
+  const { usageDataByPlatform, updateUsageDataField } = useUsageStore(
     useShallow((state) => ({
       usageDataByPlatform: state.usageDataByPlatform,
       updateUsageDataField: state.updateUsageDataField,
     })),
   );
+  const selectedReasons = usageDataByPlatform[platform]?.reasons ?? [];
+  console.log(selectedReasons);
   return (
     <>
       <p className='text-gray-600 mb-8'>
@@ -50,13 +53,15 @@ const WhyPerPlatform = ({ platform }: { platform: PlatformName }) => {
         {reasons.map((reason) => (
           <Button
             key={reason}
-            variant={
-              usageDataByPlatform[platform]?.reasons.includes(reason)
-                ? 'default'
-                : 'outline'
-            }
+            variant={selectedReasons.includes(reason) ? 'default' : 'outline'}
             onClick={() => {
-              updateUsageDataField(platform, 'reasons', reason);
+              updateUsageDataField(
+                platform,
+                'reasons',
+                selectedReasons.includes(reason)
+                  ? selectedReasons.filter((r) => r !== reason)
+                  : [...selectedReasons, reason],
+              );
             }}
           >
             {reason}

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
-import { useRecoveryPathStore } from '../store';
+import { useRecoveryPathStore } from '../store/uxStore';
 
 const CONSEQUENCES = [
   'Anxiety',

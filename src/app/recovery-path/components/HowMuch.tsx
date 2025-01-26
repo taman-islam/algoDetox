@@ -1,6 +1,7 @@
 import { PlatformName } from '../../platforms/websiteData';
-import { useRecoveryPathStore } from '../store';
+import { useRecoveryPathStore } from '../store/uxStore';
 import { useShallow } from 'zustand/react/shallow';
+import { useUsageStore } from '../store/usageStore';
 
 export const HowMuch = () => {
   const { selectedPlatforms } = useRecoveryPathStore(
@@ -23,7 +24,7 @@ export const HowMuch = () => {
 };
 
 const HowMuchPerPlatform = ({ platform }: { platform: PlatformName }) => {
-  const { usageDataByPlatform, updateUsageDataField } = useRecoveryPathStore(
+  const { usageDataByPlatform, updateUsageDataField } = useUsageStore(
     useShallow((state) => ({
       usageDataByPlatform: state.usageDataByPlatform,
       updateUsageDataField: state.updateUsageDataField,

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useShallow } from 'zustand/react/shallow';
-import { useRecoveryPathStore } from '../store';
+import { useRecoveryPathStore } from '../store/uxStore';
 import { PlatformName } from '@/app/platforms/websiteData';
 
 const RESULTS = [
@@ -25,9 +25,10 @@ const RESULTS = [
 export type Result = (typeof RESULTS)[number];
 
 export const ResultsComponent = () => {
-  const { selectedPlatforms } = useRecoveryPathStore(
+  const { selectedPlatforms, results } = useRecoveryPathStore(
     useShallow((state) => ({
       selectedPlatforms: state.selectedPlatforms,
+      results: state.results,
     })),
   );
 
