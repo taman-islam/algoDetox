@@ -1,12 +1,98 @@
 import {
   Smartphone,
-  Laptop,
   Trash2,
-  Lock,
   Smile,
   Zap,
   Heart,
+  Clock,
+  Monitor,
+  Shield,
+  Calendar,
+  Bell,
+  Book,
 } from 'lucide-react';
+
+const DetoxLevel = {
+  EASY: 'Easy',
+  COMMITTED: 'Committed',
+  ADVANCED: 'Advanced',
+} as const;
+
+type DetoxLevel = (typeof DetoxLevel)[keyof typeof DetoxLevel];
+
+const DetoxActionsByLevel: Record<
+  DetoxLevel,
+  {
+    title: string;
+    outcome: string;
+    description: string;
+    actions: {
+      icon: React.ReactNode;
+      content: string;
+    }[];
+  }
+> = {
+  [DetoxLevel.EASY]: {
+    title: 'Ease Into It',
+    outcome: 'Test the waters',
+    description:
+      'Start by reducing exposure. Set app time limits and remove easy access on your computer.',
+    actions: [
+      {
+        icon: <Clock className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Set daily app usage timers on your phone.',
+      },
+      {
+        icon: <Monitor className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Use browser extensions to remind you to take breaks.',
+      },
+      {
+        icon: <Calendar className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Schedule specific times for checking social media.',
+      },
+    ],
+  },
+  [DetoxLevel.COMMITTED]: {
+    title: 'Take Control',
+    outcome: 'Reduce dependency',
+    description:
+      'Limit engagement further by removing apps from your phone and restricting desktop access.',
+    actions: [
+      {
+        icon: <Smartphone className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Uninstall social media apps from your phone.',
+      },
+      {
+        icon: <Shield className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Use website blockers to control access on your computer.',
+      },
+      {
+        icon: <Bell className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Turn off notifications for all social media apps.',
+      },
+    ],
+  },
+  [DetoxLevel.ADVANCED]: {
+    title: 'Full Detox',
+    outcome: 'Break free completely',
+    description:
+      'Go all-in: deactivate accounts, eliminate all access points, and replace with healthier habits.',
+    actions: [
+      {
+        icon: <Trash2 className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Deactivate or permanently delete social media accounts.',
+      },
+      {
+        icon: <Shield className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Block access to social platforms on all devices.',
+      },
+      {
+        icon: <Book className='h-4 w-4 text-blue-600 mr-2' />,
+        content: 'Replace social media time with a new hobby or skill.',
+      },
+    ],
+  },
+};
 
 export default function PersonalizedPlanPage() {
   return (
@@ -39,23 +125,26 @@ export default function PersonalizedPlanPage() {
               <div className='flex items-center mb-4'>
                 <Smile className='h-8 w-8 text-blue-600 mr-2' />
                 <div>
-                  <h3 className='text-xl font-semibold'>Easy</h3>
-                  <p className='text-sm text-gray-500'>Try it out</p>
+                  <h3 className='text-xl font-semibold'>
+                    {DetoxActionsByLevel[DetoxLevel.EASY].title}
+                  </h3>
+                  <p className='text-sm text-gray-500'>
+                    {DetoxActionsByLevel[DetoxLevel.EASY].outcome}
+                  </p>
                 </div>
               </div>
               <p className='text-gray-600 mb-4'>
-                Set time limits on your phone and avoid using these apps on your
-                computer.
+                {DetoxActionsByLevel[DetoxLevel.EASY].description}
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center'>
-                  <Smartphone className='h-4 w-4 text-blue-600 mr-2' />
-                  Use app timers to limit daily usage.
-                </li>
-                <li className='flex items-center'>
-                  <Laptop className='h-4 w-4 text-blue-600 mr-2' />
-                  Avoid accessing these apps on your computer.
-                </li>
+                {DetoxActionsByLevel[DetoxLevel.EASY].actions.map(
+                  (action, index) => (
+                    <li key={index} className='flex items-center'>
+                      {action.icon}
+                      {action.content}
+                    </li>
+                  ),
+                )}
               </ul>
               <div className='mt-6 text-center'>
                 <a
@@ -72,23 +161,26 @@ export default function PersonalizedPlanPage() {
               <div className='flex items-center mb-4'>
                 <Zap className='h-8 w-8 text-blue-600 mr-2' />
                 <div>
-                  <h3 className='text-xl font-semibold'>Committed</h3>
-                  <p className='text-sm text-gray-500'>Take control</p>
+                  <h3 className='text-xl font-semibold'>
+                    {DetoxActionsByLevel[DetoxLevel.COMMITTED].title}
+                  </h3>
+                  <p className='text-sm text-gray-500'>
+                    {DetoxActionsByLevel[DetoxLevel.COMMITTED].outcome}
+                  </p>
                 </div>
               </div>
               <p className='text-gray-600 mb-4'>
-                Remove these apps from your phone and use them only on your
-                computer with site blockers.
+                {DetoxActionsByLevel[DetoxLevel.COMMITTED].description}
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center'>
-                  <Smartphone className='h-4 w-4 text-blue-600 mr-2' />
-                  Delete apps from your phone.
-                </li>
-                <li className='flex items-center'>
-                  <Lock className='h-4 w-4 text-blue-600 mr-2' />
-                  Use site blockers to limit access on your computer.
-                </li>
+                {DetoxActionsByLevel[DetoxLevel.COMMITTED].actions.map(
+                  (action, index) => (
+                    <li key={index} className='flex items-center'>
+                      {action.icon}
+                      {action.content}
+                    </li>
+                  ),
+                )}
               </ul>
               <div className='mt-6 text-center'>
                 <a
@@ -105,23 +197,26 @@ export default function PersonalizedPlanPage() {
               <div className='flex items-center mb-4'>
                 <Heart className='h-8 w-8 text-blue-600 mr-2' />
                 <div>
-                  <h3 className='text-xl font-semibold'>Advanced</h3>
-                  <p className='text-sm text-gray-500'>Reclaim your life</p>
+                  <h3 className='text-xl font-semibold'>
+                    {DetoxActionsByLevel[DetoxLevel.ADVANCED].title}
+                  </h3>
+                  <p className='text-sm text-gray-500'>
+                    {DetoxActionsByLevel[DetoxLevel.ADVANCED].outcome}
+                  </p>
                 </div>
               </div>
               <p className='text-gray-600 mb-4'>
-                Go all-in: deactivate your accounts and embrace total abstinence
-                from these platforms.
+                {DetoxActionsByLevel[DetoxLevel.ADVANCED].description}
               </p>
               <ul className='space-y-2'>
-                <li className='flex items-center'>
-                  <Trash2 className='h-4 w-4 text-blue-600 mr-2' />
-                  Deactivate or delete your accounts.
-                </li>
-                <li className='flex items-center'>
-                  <Lock className='h-4 w-4 text-blue-600 mr-2' />
-                  Use blockers to prevent access on all devices.
-                </li>
+                {DetoxActionsByLevel[DetoxLevel.ADVANCED].actions.map(
+                  (action, index) => (
+                    <li key={index} className='flex items-center'>
+                      {action.icon}
+                      {action.content}
+                    </li>
+                  ),
+                )}
               </ul>
               <div className='mt-6 text-center'>
                 <a
