@@ -43,7 +43,6 @@ const WhyPerPlatform = ({ platform }: { platform: PlatformName }) => {
     })),
   );
   const selectedReasons = usageDataByPlatform[platform]?.reasons ?? [];
-  console.log(selectedReasons);
   return (
     <>
       <p className='text-gray-600 mb-8'>

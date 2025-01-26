@@ -17,6 +17,7 @@ export const ConclusionComponent = () => {
   );
 
   const updatePlatformUsefulness = (platform: string, usefulness: boolean) => {
+    // TODO(Taman): Update the usage data
     console.log('updatePlatformUsefulness', platform, usefulness);
   };
 
