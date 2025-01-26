@@ -37,7 +37,7 @@ const HowMuchPerPlatform = ({ platform }: { platform: PlatformName }) => {
       </p>
       <div className='space-y-4 mb-8'>
         <input
-          type='text'
+          type='number'
           placeholder={`How many times do you check ${platform} in a day? (e.g., 10)`}
           className='w-full p-2 border border-gray-300 rounded-md'
           value={usageDataByPlatform[platform]?.frequency || ''}
@@ -46,7 +46,7 @@ const HowMuchPerPlatform = ({ platform }: { platform: PlatformName }) => {
           }
         />
         <input
-          type='text'
+          type='number'
           placeholder={`How many hours a day do you spend on ${platform}?`}
           className='w-full p-2 border border-gray-300 rounded-md'
           value={usageDataByPlatform[platform]?.hoursPerDay || ''}

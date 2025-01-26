@@ -10,6 +10,8 @@ import { HowMuch } from './components/HowMuch';
 import { Consequences } from './components/Consequences';
 import { Alternatives } from './components/Alternatives';
 import { memo } from 'react';
+import { ResultsComponent } from './components/Results';
+import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 
 export function RecoveryPathContainer() {
   const { activeStep } = useRecoveryPathStore(
@@ -25,6 +27,7 @@ export function RecoveryPathContainer() {
         {activeStep === 'What' && <What />}
         {activeStep === 'Why' && <Why />}
         {activeStep === 'How Much' && <HowMuch />}
+        {activeStep === 'Results' && <ResultsComponent />}
         {activeStep === 'Consequences' && <Consequences />}
         {activeStep === 'Alternatives' && <Alternatives />}
         <NavigationButtons />
@@ -34,27 +37,31 @@ export function RecoveryPathContainer() {
 }
 
 const NavigationButtons = () => {
-  const { activeStep, setActiveStep } = useRecoveryPathStore(
+  const { activeStep, setActiveStep, selectedPlatforms } = useRecoveryPathStore(
     useShallow((state) => ({
       activeStep: state.activeStep,
       setActiveStep: state.setActiveStep,
+      selectedPlatforms: state.selectedPlatforms,
     })),
   );
   return (
     <div className='mt-8 flex justify-between'>
-      {activeStep != STEPS[0] && (
+      {activeStep == STEPS[0] ? (
+        <p></p>
+      ) : (
         <Button
           variant='outline'
           onClick={() => setActiveStep(STEPS[STEPS.indexOf(activeStep) - 1])}
         >
-          Back
+          <ArrowLeftIcon className='w-4 h-4' /> Back
         </Button>
       )}
       {activeStep != STEPS[STEPS.length - 1] ? (
         <Button
+          disabled={activeStep === STEPS[0] && !selectedPlatforms.length}
           onClick={() => setActiveStep(STEPS[STEPS.indexOf(activeStep) + 1])}
         >
-          Next
+          Next <ArrowRightIcon className='w-4 h-4' />
         </Button>
       ) : (
         <Link href='/personalized-plan'>

@@ -2,22 +2,17 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { PlatformName } from '../platforms/websiteData';
 
-export type RecoveryPathStep =
-  | 'What'
-  | 'Why'
-  | 'How Much'
-  | 'Consequences'
-  | 'Alternatives'
-  | 'Conclusion';
-
-export const STEPS: RecoveryPathStep[] = [
+export const STEPS = [
   'What',
   'Why',
   'How Much',
+  'Results',
   'Consequences',
   'Alternatives',
   'Conclusion',
-];
+] as const;
+
+export type RecoveryPathStep = (typeof STEPS)[number];
 
 export type UsageData = {
   reasons: string[];
@@ -33,6 +28,9 @@ type RecoveryPathState = {
   selectedPlatforms: PlatformName[];
   consequences: string[];
   alternatives: string[];
+  results: {
+    [key in PlatformName]?: string[];
+  };
   setActiveStep: (step: RecoveryPathStep) => void;
   toggleSelectedPlatform: (platform: PlatformName) => void;
   setSelectedPlatforms: (platforms: PlatformName[]) => void;
@@ -43,6 +41,7 @@ type RecoveryPathState = {
   ) => void;
   updateConsequences: (consequence: string) => void;
   updateAlternatives: (alternative: string) => void;
+  updateResults: (platform: PlatformName, result: string) => void;
 };
 
 export const useRecoveryPathStore = create<RecoveryPathState>()(
@@ -53,7 +52,7 @@ export const useRecoveryPathStore = create<RecoveryPathState>()(
       selectedPlatforms: [],
       consequences: [],
       alternatives: [],
-
+      results: {},
       setActiveStep: (step: RecoveryPathStep) => {
         set({ activeStep: step });
       },
@@ -91,6 +90,13 @@ export const useRecoveryPathStore = create<RecoveryPathState>()(
           alternatives: state.alternatives.includes(alternative)
             ? state.alternatives.filter((a) => a !== alternative)
             : [...state.alternatives, alternative],
+        })),
+      updateResults: (platform: PlatformName, result: string) =>
+        set((state) => ({
+          results: {
+            ...get().results,
+            [platform]: [...(get().results[platform] || []), result],
+          },
         })),
     }),
     {
