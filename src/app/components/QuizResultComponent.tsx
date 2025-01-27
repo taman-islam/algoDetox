@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { useQuizStore } from '../store';
+import { memo, useEffect, useState } from 'react';
+import { QuizResult, useQuizStore } from '../quizStore';
 import { useShallow } from 'zustand/react/shallow';
 import {
   Card,
@@ -10,29 +10,29 @@ import {
   CardFooter,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, XCircle, RefreshCcw } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-type AddictionName = 'severe' | 'moderate' | 'mild' | 'none';
-
-type Result = {
-  addiction: AddictionName;
-  title: string;
-  description: string;
-};
+import { AddictionName, getResult } from '../quizStore';
+import { MAX_POSSIBLE_SCORE } from '../quizStore';
+import Link from 'next/link';
 
 export const QuizResults = memo(() => {
-  const { quizScore, reset, questions } = useQuizStore(
+  const { quizScore, reset, needsAlgoDetox } = useQuizStore(
     useShallow((state) => ({
       quizScore: state.quizScore,
       reset: state.reset,
-      questions: state.getQuestions(),
+      needsAlgoDetox: state.needsAlgoDetox(),
     })),
   );
+  const scorePercentage = (quizScore * 100) / MAX_POSSIBLE_SCORE;
 
-  const totalPossibleScore = questions.length * 2;
-  const scorePercentage = (quizScore / totalPossibleScore) * 100;
-  const result = getResult(scorePercentage);
+  const [result, setResult] = useState<QuizResult | null>(null);
+  useEffect(() => {
+    setResult(getResult(quizScore));
+  }, [quizScore]);
+
+  if (!result) return null;
+
   const { textColorClass, icon, emoji, bgColorClass } =
     StyleByAddiction[result.addiction];
 
@@ -60,53 +60,23 @@ export const QuizResults = memo(() => {
         </motion.div>
         <p>
           Your score: <span className={textColorClass}>{quizScore}</span> out of{' '}
-          {totalPossibleScore}
+          {MAX_POSSIBLE_SCORE}
         </p>
       </CardContent>
       <CardFooter>
-        {result.addiction !== 'mild' && (
-          <Button onClick={() => (window.location.href = '#cta')}>
-            Learn More
+        {needsAlgoDetox && (
+          <Button>
+            <Link href='/recovery-path/personalized-plan'>Start AlgoDetox</Link>
           </Button>
         )}
-        <Button variant='outline' onClick={() => reset()}>
-          Take the Quiz Again
+        <Button className='mx-4' variant='outline' onClick={() => reset()}>
+          <RefreshCcw className='h-4 w-4' />
+          Retake
         </Button>
       </CardFooter>
     </Card>
   );
 });
-
-const getResult = (scorePercentage: number): Result => {
-  if (scorePercentage >= 70) {
-    return {
-      addiction: 'severe',
-      title: 'AlgoDetox is for you',
-      description:
-        "It looks like digital habits are significantly impacting your well-being. Here's how to start your AlgoDetox journey.",
-    };
-  } else if (scorePercentage >= 40) {
-    return {
-      addiction: 'moderate',
-      title: 'Your habits are strong, but there’s room for improvement.',
-      description: 'Here’s how to strengthen them further.',
-    };
-  } else if (scorePercentage > 0) {
-    return {
-      addiction: 'mild',
-      title:
-        'You have great control over your digital habits! But you can still improve with AlgoDetox.',
-      description: 'Keep up the good work.',
-    };
-  } else {
-    return {
-      addiction: 'none',
-      title:
-        'You have excellent control over your digital habits! You don’t need AlgoDetox.  ',
-      description: 'Keep up the good work.',
-    };
-  }
-};
 
 const StyleByAddiction: Record<
   AddictionName,

@@ -1,7 +1,7 @@
 'use client';
 
 import { HomeComponent } from './Home';
-import { useQuizStore } from '../store';
+import { useQuizStore } from '../quizStore';
 
 export function HomeContainer() {
   const quizCompleted = useQuizStore((state) => state.quizCompleted);

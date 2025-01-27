@@ -148,9 +148,8 @@ export default function PersonalizedPlanPage() {
           </div>
         </div>
       </section>
-      
 
-      <RecommendedActions />
+      {/* <RecommendedActions /> */}
 
       {/* Three-Card Layout */}
       <section className='py-16 bg-white'>
