@@ -14,207 +14,186 @@ import {
   HeartHandshake,
   GitPullRequest,
 } from 'lucide-react';
+import { memo } from 'react';
+import { QuizComponent } from './QuizComponent';
 
-export function HomeComponent() {
-  return (
-    <div>
-      {/* Hero Section */}
-      <section className='py-20'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='text-center'>
-            <h1 className='text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl'>
-              Break Free from Digital Addiction.
-              <span className='text-blue-600'> Reclaim Your Life.</span>
-            </h1>
-            <p className='mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl'>
-              AlgoDetox helps you escape the dopamine traps of social media and
-              addictive apps through a personalized 30-day detox plan, daily
-              check-ins, and mindful reintroduction.
-            </p>
-            <div className='mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8'>
-              <Link href='/join-waitlist' className='rounded-md shadow'>
-                <Button className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10'>
-                  Join the Waitlist – Free
-                </Button>
-              </Link>
-              {/* <div className='mt-3 rounded-md shadow sm:mt-0 sm:ml-3'>
-                <Button
-                  variant='outline'
-                  className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10'
-                >
-                  Support the Mission
-                </Button>
-              </div> */}
-            </div>
-          </div>
-        </div>
-      </section>
+export const HomeComponent = memo(
+  ({ quizCompleted }: { quizCompleted: boolean }) => {
+    return (
+      <div>
+        {/* Hero Section */}
+        <QuizComponent />
 
-      <section className='py-16 bg-gray-50'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
-            Why Trust AlgoDetox?
-          </h2>
-          <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
-            <div className='flex flex-col items-center text-center'>
-              <ShieldCheck className='h-12 w-12 text-blue-600 mb-4' />
-              <h3 className='text-xl font-semibold mb-2'>Non-Profit Mission</h3>
-              <p className='text-gray-600'>
-                We’re here to help, not profit. AlgoDetox is a non-profit
-                initiative dedicated to improving human life through reducing
-                digital addiction.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <Lock className='h-12 w-12 text-blue-600 mb-4' />{' '}
-              <h3 className='text-xl font-semibold mb-2'>No Tracking, Ever</h3>
-              <p className='text-gray-600'>
-                We don’t and will never show ads. Your privacy is our priority,
-                and we never track or sell your data.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <Code className='h-12 w-12 text-blue-600 mb-4' />{' '}
-              <h3 className='text-xl font-semibold mb-2'>
-                Open Source Algorithms
-              </h3>
-              <p className='text-gray-600'>
-                Our algorithms are transparent and open source. You can see
-                exactly how they work.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why AlgoDetox? */}
-      <section className='py-16 bg-gray-50'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
-            Why AlgoDetox?
-          </h2>
-          <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
-            <div className='flex flex-col items-center text-center'>
-              <ShieldCheck className='h-12 w-12 text-blue-600 mb-4' />
-              <h3 className='text-xl font-semibold mb-2'>
-                Algorithm-driven dopamine traps
-              </h3>
-              <p className='text-gray-600'>
-                Understand how tech companies profit from your attention and
-                learn to break free.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <Zap className='h-12 w-12 text-blue-600 mb-4' />
-              <h3 className='text-xl font-semibold mb-2'>
-                The Mass Health Crisis
-              </h3>
-              <p className='text-gray-600'>
-                Explore how addictive tech contributes to rising anxiety,
-                depression, and societal disconnection on a global scale.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <SmilePlus className='h-12 w-12 text-blue-600 mb-4' />
-              <h3 className='text-xl font-semibold mb-2'>
-                Personalized detox journey
-              </h3>
-              <p className='text-gray-600'>
-                Get a tailored 30-day plan to rewire your brain for better focus
-                and wellbeing.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className='py-16'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
-            How It Works
-          </h2>
-          <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
-            <div className='flex flex-col items-center text-center'>
-              <div className='bg-blue-100 rounded-full p-3 mb-4'>
-                <ShieldCheck className='h-8 w-8 text-blue-600' />
+        <section className='py-16 bg-gray-50'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+            <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
+              Why Trust AlgoDetox?
+            </h2>
+            <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
+              <div className='flex flex-col items-center text-center'>
+                <ShieldCheck className='h-12 w-12 text-blue-600 mb-4' />
+                <h3 className='text-xl font-semibold mb-2'>
+                  Non-Profit Mission
+                </h3>
+                <p className='text-gray-600'>
+                  We’re here to help, not profit. AlgoDetox is a non-profit
+                  initiative dedicated to improving human life through reducing
+                  digital addiction.
+                </p>
               </div>
-              <h3 className='text-lg font-semibold mb-2'>
-                Personalize Your Journey
-              </h3>
-              <p className='text-gray-600'>
-                Identify your challenges and set initial detox goals.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <div className='bg-blue-100 rounded-full p-3 mb-4'>
-                <Activity className='h-8 w-8 text-blue-600' />
+              <div className='flex flex-col items-center text-center'>
+                <Lock className='h-12 w-12 text-blue-600 mb-4' />{' '}
+                <h3 className='text-xl font-semibold mb-2'>
+                  No Tracking, Ever
+                </h3>
+                <p className='text-gray-600'>
+                  We don’t and will never show ads. Your privacy is our
+                  priority, and we never track or sell your data.
+                </p>
               </div>
-              <h3 className='text-lg font-semibold mb-2'>
-                Follow Your 30-Day Plan
-              </h3>
-              <p className='text-gray-600'>
-                Get daily challenges and tips to reduce digital dependence.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <div className='bg-blue-100 rounded-full p-3 mb-4'>
-                <Heart className='h-8 w-8 text-blue-600' />
+              <div className='flex flex-col items-center text-center'>
+                <Code className='h-12 w-12 text-blue-600 mb-4' />{' '}
+                <h3 className='text-xl font-semibold mb-2'>
+                  Open Source Algorithms
+                </h3>
+                <p className='text-gray-600'>
+                  Our algorithms are transparent and open source. You can see
+                  exactly how they work.
+                </p>
               </div>
-              <h3 className='text-lg font-semibold mb-2'>
-                Track Your Progress
-              </h3>
-              <p className='text-gray-600'>
-                Log daily check-ins and see your improvements over time.
-              </p>
-            </div>
-            <div className='flex flex-col items-center text-center'>
-              <div className='bg-blue-100 rounded-full p-3 mb-4'>
-                <Brain className='h-8 w-8 text-blue-600' />
-              </div>
-              <h3 className='text-lg font-semibold mb-2'>
-                Gain Valuable Insights
-              </h3>
-              <p className='text-gray-600'>
-                Understand your behavior patterns and emotional triggers.
-              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Success Stories */}
-
-      {/* Support the Mission */}
-      <JoinTheMission />
-
-      {/* Footer */}
-      <footer className='bg-gray-800 text-white py-8'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex justify-between items-center'>
-            <div className='flex items-center'>
-              <Brain className='h-8 w-8 text-blue-400' />
-              <span className='ml-2 text-xl font-bold'>AlgoDetox</span>
+        {/* Why AlgoDetox? */}
+        <section className='py-16 bg-gray-50'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+            <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
+              Why AlgoDetox?
+            </h2>
+            <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
+              <div className='flex flex-col items-center text-center'>
+                <ShieldCheck className='h-12 w-12 text-blue-600 mb-4' />
+                <h3 className='text-xl font-semibold mb-2'>
+                  Algorithm-driven dopamine traps
+                </h3>
+                <p className='text-gray-600'>
+                  Understand how tech companies profit from your attention and
+                  learn to break free.
+                </p>
+              </div>
+              <div className='flex flex-col items-center text-center'>
+                <Zap className='h-12 w-12 text-blue-600 mb-4' />
+                <h3 className='text-xl font-semibold mb-2'>
+                  The Mass Health Crisis
+                </h3>
+                <p className='text-gray-600'>
+                  Explore how addictive tech contributes to rising anxiety,
+                  depression, and societal disconnection on a global scale.
+                </p>
+              </div>
+              <div className='flex flex-col items-center text-center'>
+                <SmilePlus className='h-12 w-12 text-blue-600 mb-4' />
+                <h3 className='text-xl font-semibold mb-2'>
+                  Personalized detox journey
+                </h3>
+                <p className='text-gray-600'>
+                  Get a tailored 30-day plan to rewire your brain for better
+                  focus and wellbeing.
+                </p>
+              </div>
             </div>
-            <Links />
-            {/* TODO: Add links <Links /> */}
           </div>
-        </div>
-        <Copyright />
-      </footer>
-    </div>
-  );
-}
+        </section>
 
-const Copyright = () => {
+        {/* How It Works */}
+        <section className='py-16'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+            <h2 className='text-3xl font-extrabold text-gray-900 text-center mb-8'>
+              How It Works
+            </h2>
+            <div className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
+              <div className='flex flex-col items-center text-center'>
+                <div className='bg-blue-100 rounded-full p-3 mb-4'>
+                  <ShieldCheck className='h-8 w-8 text-blue-600' />
+                </div>
+                <h3 className='text-lg font-semibold mb-2'>
+                  Personalize Your Journey
+                </h3>
+                <p className='text-gray-600'>
+                  Identify your challenges and set initial detox goals.
+                </p>
+              </div>
+              <div className='flex flex-col items-center text-center'>
+                <div className='bg-blue-100 rounded-full p-3 mb-4'>
+                  <Activity className='h-8 w-8 text-blue-600' />
+                </div>
+                <h3 className='text-lg font-semibold mb-2'>
+                  Follow Your 30-Day Plan
+                </h3>
+                <p className='text-gray-600'>
+                  Get daily challenges and tips to reduce digital dependence.
+                </p>
+              </div>
+              <div className='flex flex-col items-center text-center'>
+                <div className='bg-blue-100 rounded-full p-3 mb-4'>
+                  <Heart className='h-8 w-8 text-blue-600' />
+                </div>
+                <h3 className='text-lg font-semibold mb-2'>
+                  Track Your Progress
+                </h3>
+                <p className='text-gray-600'>
+                  Log daily check-ins and see your improvements over time.
+                </p>
+              </div>
+              <div className='flex flex-col items-center text-center'>
+                <div className='bg-blue-100 rounded-full p-3 mb-4'>
+                  <Brain className='h-8 w-8 text-blue-600' />
+                </div>
+                <h3 className='text-lg font-semibold mb-2'>
+                  Gain Valuable Insights
+                </h3>
+                <p className='text-gray-600'>
+                  Understand your behavior patterns and emotional triggers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Success Stories */}
+
+        {/* Support the Mission */}
+        <JoinTheMission />
+
+        {/* Footer */}
+        <footer className='bg-gray-800 text-white py-8'>
+          <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+            <div className='flex justify-between items-center'>
+              <div className='flex items-center'>
+                <Brain className='h-8 w-8 text-blue-400' />
+                <span className='ml-2 text-xl font-bold'>AlgoDetox</span>
+              </div>
+              <Links />
+              {/* TODO: Add links <Links /> */}
+            </div>
+          </div>
+          <Copyright />
+        </footer>
+      </div>
+    );
+  },
+);
+
+const Copyright = memo(() => {
   return (
     <div className='mt-4 text-center text-sm'>
       © 2025 AlgoDetox. All rights reserved.
     </div>
   );
-};
+});
 
-const Support = () => {
+const Support = memo(() => {
   return (
     <section className='py-16'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -245,9 +224,9 @@ const Support = () => {
       </div>
     </section>
   );
-};
+});
 
-const SuccessStories = () => {
+const SuccessStories = memo(() => {
   return (
     <section className='py-16 bg-gray-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -280,9 +259,9 @@ const SuccessStories = () => {
       </div>
     </section>
   );
-};
+});
 
-const Links = () => (
+const Links = memo(() => (
   <div className='flex space-x-6'>
     <Link href='/privacy-notice' className='hover:text-blue-400'>
       Privacy Policy
@@ -291,9 +270,9 @@ const Links = () => (
       Terms of Service
     </Link>
   </div>
-);
+));
 
-const JoinTheMission = () => {
+const JoinTheMission = memo(() => {
   return (
     <section className='py-16 bg-blue-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -359,4 +338,4 @@ const JoinTheMission = () => {
       </div>
     </section>
   );
-};
+});
