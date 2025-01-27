@@ -2,19 +2,83 @@
 
 import { useState } from 'react';
 import {
-  Trash2,
-  Smartphone,
-  Mail,
-  Slash,
-  Book,
   Check,
-  Slack,
-  Chrome,
-  Blocks,
-  CreditCard,
+  Slash,
+  Clock,
+  Monitor,
+  Bell,
+  Calendar,
+  AlertCircle,
 } from 'lucide-react';
 
-export default function AdvancedDetoxPage() {
+import Link from 'next/link';
+
+const COLOR_CLASS = 'blue-600';
+const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
+
+const easySteps = [
+  {
+    icon: <Slash className={ICON_CLASS} />,
+    content: <span>Separate your work and personal devices.</span>,
+    details:
+      'Use a work-only device for work-related tasks and a personal device for personal use.',
+  },
+  {
+    icon: <Clock className={ICON_CLASS} />,
+    content: (
+      <span>Set daily app usage timers for social media on your phone.</span>
+    ),
+    details:
+      'Setting timers helps you become aware of how much time you spend on social media and encourages mindful usage.',
+  },
+  {
+    icon: <Monitor className={ICON_CLASS} />,
+    content: (
+      <span>
+        Use browser extensions to limit access to social media on your computer.
+      </span>
+    ),
+    details:
+      'Limiting access on your computer reduces temptation and helps you focus on productive tasks.',
+  },
+  {
+    icon: <Bell className={ICON_CLASS} />,
+    content: (
+      <span>
+        Turn off notifications for non-essential apps. Only allow important
+        notifications from absolutely necessary apps.
+      </span>
+    ),
+    details:
+      'Notifications are a major source of distraction. Turning them off helps you stay focused and reduces interruptions.',
+  },
+  {
+    icon: <Calendar className={ICON_CLASS} />,
+    content: <span>Schedule specific times for checking social media.</span>,
+    details:
+      'Designating specific times for social media helps you avoid constant checking and creates a healthier routine.',
+  },
+  {
+    icon: <AlertCircle className={ICON_CLASS} />,
+    content: (
+      <span>
+        If you find yourself unable to stick to these limits, consider upgrading
+        to the{' '}
+        <Link
+          className='font-medium text-blue-600 hover:text-blue-500'
+          href='/start-detox/committed'
+        >
+          Committed Detox
+        </Link>
+        .
+      </span>
+    ),
+    details:
+      'The Easy Detox is a starting point, but if you struggle to stay within limits, a more committed approach may be necessary.',
+  },
+];
+
+export default function ModerateDetoxPage() {
   // State to track completed steps
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     Array(5).fill(false),
@@ -29,52 +93,6 @@ export default function AdvancedDetoxPage() {
     });
   };
 
-  const steps = [
-    {
-      icon: <Trash2 className='h-6 w-6 text-purple-600' />,
-      content: 'Deactivate or permanently delete all social media accounts.',
-    },
-    {
-      icon: <Chrome className='h-6 w-6 text-purple-600' />,
-      content:
-        'Use a privacy-focused browser like Firefox and avoid signing in.',
-    },
-    {
-      icon: <Blocks className='h-6 w-6 text-purple-600' />,
-      content:
-        'Install an ad blocker extension (e.g., AdBlock, uBlock Origin, AdGuard).',
-    },
-    {
-      icon: <Slash className='h-6 w-6 text-purple-600' />,
-      content:
-        'Block distracting websites using tools like Freedom, Cold Turkey, or News Feed Eradicator.',
-    },
-    {
-      icon: <Smartphone className='h-6 w-6 text-purple-600' />,
-      content: 'Remove social media and non-essential apps from your phone.',
-    },
-    {
-      icon: <Mail className='h-6 w-6 text-purple-600' />,
-      content:
-        'Delete email apps from your personal phone to reduce distractions.',
-    },
-    {
-      icon: <Slack className='h-6 w-6 text-purple-600' />,
-      content:
-        'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
-    },
-    {
-      icon: <Book className='h-6 w-6 text-purple-600' />,
-      content:
-        'Replace screen time with offline activities like reading, exercise, or learning a new skill.',
-    },
-    {
-      icon: <CreditCard className='h-6 w-6 text-purple-600' />,
-      content:
-        'Disable credit card auto-fill in browsers to prevent impulse purchases.',
-    },
-  ];
-
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
       {/* Hero Section */}
@@ -82,11 +100,11 @@ export default function AdvancedDetoxPage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <h1 className='text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl'>
-              Advanced Detox Strategy
+              <span className={`text-${COLOR_CLASS}`}>Easy</span> Detox Strategy
             </h1>
             <p className='mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl'>
-              Break free completely by following these actionable steps. Check
-              off each task as you complete it.
+              Break free from social media addiction by following these
+              actionable steps. Check off each task as you complete it.
             </p>
           </div>
         </div>
@@ -96,7 +114,7 @@ export default function AdvancedDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {steps.map((step, index) => (
+            {easySteps.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
@@ -144,7 +162,7 @@ export default function AdvancedDetoxPage() {
             <span className='font-bold text-purple-600'>
               {completedSteps.filter(Boolean).length}
             </span>{' '}
-            out of {steps.length} steps.
+            out of {easySteps.length} steps.
           </p>
         </div>
       </section>

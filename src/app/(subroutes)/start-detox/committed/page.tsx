@@ -2,22 +2,92 @@
 
 import { useState } from 'react';
 import {
-  Trash2,
   Smartphone,
   Mail,
-  Slash,
   Book,
   Check,
   Slack,
-  Chrome,
-  Blocks,
-  CreditCard,
+  Shield,
+  Calendar,
+  AlertCircle,
+  StopCircle,
 } from 'lucide-react';
+import Link from 'next/link';
+
+const COLOR_CLASS = 'purple-600';
+
+const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
+
+const committedSteps = [
+  {
+    icon: <Smartphone className={ICON_CLASS} />,
+    content: 'Uninstall all social media apps from your phone.',
+    details:
+      'Removing apps from your phone eliminates easy access and reduces the temptation to scroll mindlessly.',
+  },
+  {
+    icon: <Shield className={ICON_CLASS} />,
+    content:
+      'Use website blockers to restrict access to social media on your computer.',
+    details:
+      'Website blockers help you create a distraction-free environment, making it easier to focus on important tasks.',
+  },
+  {
+    icon: <StopCircle className={ICON_CLASS} />,
+    content:
+      'Use News Feed Eradicator on your browser so you can still use some features but limit your exposure to infinite scrolling.',
+    details:
+      'News Feed Limiters help you create a distraction-free environment, making it easier to focus on important tasks.',
+  },
+  {
+    icon: <Mail className={ICON_CLASS} />,
+    content: 'Remove email apps from your personal phone.',
+    details:
+      'Deleting email apps from your personal phone reduces distractions and helps you separate work from personal life.',
+  },
+  {
+    icon: <Slack className={ICON_CLASS} />,
+    content:
+      'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
+    details:
+      'Keeping work apps off your personal phone helps you maintain boundaries and avoid burnout.',
+  },
+  {
+    icon: <Book className={ICON_CLASS} />,
+    content:
+      'Replace screen time with offline activities like reading or exercising.',
+    details:
+      'Replacing digital habits with offline activities improves mental health and helps you develop new, healthier routines.',
+  },
+  {
+    icon: <Calendar className={ICON_CLASS} />,
+    content:
+      'Schedule specific times for checking email and work-related apps.',
+    details:
+      'Designating specific times for checking email and work apps helps you stay focused and avoid constant interruptions.',
+  },
+  {
+    icon: <AlertCircle className={ICON_CLASS} />,
+    content: (
+      <span>
+        If you still find yourself distracted, consider upgrading to the{' '}
+        <Link
+          href='/start-detox/advanced'
+          className='font-medium text-blue-600 hover:text-blue-500'
+        >
+          Advanced Detox.
+        </Link>{' '}
+      </span>
+    ),
+    details:
+      'The Committed Detox is effective for many, but if you need a more drastic change, the Advanced Detox may be the right choice.',
+  },
+];
 
 export default function ModerateDetoxPage() {
   // State to track completed steps
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    Array(5).fill(false),
+    Array(committedSteps.length).fill(false),
   );
 
   // Toggle completion status of a step
@@ -29,52 +99,6 @@ export default function ModerateDetoxPage() {
     });
   };
 
-  const steps = [
-    {
-      icon: <Trash2 className='h-6 w-6 text-purple-600' />,
-      content: 'Deactivate or permanently delete all social media accounts.',
-    },
-    {
-      icon: <Chrome className='h-6 w-6 text-purple-600' />,
-      content:
-        'Use a privacy-focused browser like Firefox and avoid signing in.',
-    },
-    {
-      icon: <Blocks className='h-6 w-6 text-purple-600' />,
-      content:
-        'Install an ad blocker extension (e.g., AdBlock, uBlock Origin, AdGuard).',
-    },
-    {
-      icon: <Slash className='h-6 w-6 text-purple-600' />,
-      content:
-        'Block distracting websites using tools like Freedom, Cold Turkey, or News Feed Eradicator.',
-    },
-    {
-      icon: <Smartphone className='h-6 w-6 text-purple-600' />,
-      content: 'Remove social media and non-essential apps from your phone.',
-    },
-    {
-      icon: <Mail className='h-6 w-6 text-purple-600' />,
-      content:
-        'Delete email apps from your personal phone to reduce distractions.',
-    },
-    {
-      icon: <Slack className='h-6 w-6 text-purple-600' />,
-      content:
-        'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
-    },
-    {
-      icon: <Book className='h-6 w-6 text-purple-600' />,
-      content:
-        'Replace screen time with offline activities like reading, exercise, or learning a new skill.',
-    },
-    {
-      icon: <CreditCard className='h-6 w-6 text-purple-600' />,
-      content:
-        'Disable credit card auto-fill in browsers to prevent impulse purchases.',
-    },
-  ];
-
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
       {/* Hero Section */}
@@ -82,11 +106,12 @@ export default function ModerateDetoxPage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <h1 className='text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl'>
-              Advanced Detox Strategy
+              <span className={`text-${COLOR_CLASS}`}>Committed</span> Detox
+              Strategy
             </h1>
             <p className='mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl'>
-              Break free completely by following these actionable steps. Check
-              off each task as you complete it.
+              Take control of your digital habits with these actionable steps.
+              Check off each task as you complete it.
             </p>
           </div>
         </div>
@@ -96,7 +121,7 @@ export default function ModerateDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {steps.map((step, index) => (
+            {committedSteps.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
@@ -144,7 +169,7 @@ export default function ModerateDetoxPage() {
             <span className='font-bold text-purple-600'>
               {completedSteps.filter(Boolean).length}
             </span>{' '}
-            out of {steps.length} steps.
+            out of {committedSteps.length} steps.
           </p>
         </div>
       </section>

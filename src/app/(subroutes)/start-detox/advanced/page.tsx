@@ -1,49 +1,5 @@
 'use client';
 
-import { Clock, Monitor, Bell, Calendar, AlertCircle } from 'lucide-react';
-
-const easySteps = [
-  {
-    icon: <Slash className='h-6 w-6 text-blue-600' />,
-    content: 'Separate your work and personal devices.',
-    details:
-      'Use a work-only device for work-related tasks and a personal device for personal use.',
-  },
-  {
-    icon: <Clock className='h-6 w-6 text-blue-600' />,
-    content: 'Set daily app usage timers for social media on your phone.',
-    details:
-      'Setting timers helps you become aware of how much time you spend on social media and encourages mindful usage.',
-  },
-  {
-    icon: <Monitor className='h-6 w-6 text-blue-600' />,
-    content:
-      'Use browser extensions to limit access to social media on your computer.',
-    details:
-      'Limiting access on your computer reduces temptation and helps you focus on productive tasks.',
-  },
-  {
-    icon: <Bell className='h-6 w-6 text-blue-600' />,
-    content:
-      'Turn off notifications for non-essential apps. Only allow important notifications from absolutely necessary apps.',
-    details:
-      'Notifications are a major source of distraction. Turning them off helps you stay focused and reduces interruptions.',
-  },
-  {
-    icon: <Calendar className='h-6 w-6 text-blue-600' />,
-    content: 'Schedule specific times for checking social media.',
-    details:
-      'Designating specific times for social media helps you avoid constant checking and creates a healthier routine.',
-  },
-  {
-    icon: <AlertCircle className='h-6 w-6 text-blue-600' />,
-    content:
-      'If you find yourself unable to stick to these limits, consider upgrading to the Committed Detox.',
-    details:
-      'The Easy Detox is a starting point, but if you struggle to stay within limits, a more committed approach may be necessary.',
-  },
-];
-
 import { useState } from 'react';
 import {
   Trash2,
@@ -56,10 +12,11 @@ import {
   Chrome,
   Blocks,
   CreditCard,
+  Gamepad2,
 } from 'lucide-react';
 
-export default function ModerateDetoxPage() {
-  // State to track completed steps
+export default function AdvancedDetoxPage() {
+  const COLOR_CLASS = 'green-600';
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     Array(5).fill(false),
   );
@@ -73,6 +30,58 @@ export default function ModerateDetoxPage() {
     });
   };
 
+  const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
+
+  const steps = [
+    {
+      icon: <Trash2 className={ICON_CLASS} />,
+      content: 'Deactivate or permanently delete all social media accounts.',
+    },
+    {
+      icon: <Chrome className={ICON_CLASS} />,
+      content:
+        'Use a privacy-focused browser like Firefox and avoid signing in.',
+    },
+    {
+      icon: <Blocks className={ICON_CLASS} />,
+      content:
+        'Install an ad blocker extension (e.g., AdBlock, uBlock Origin, AdGuard).',
+    },
+    {
+      icon: <Slash className={ICON_CLASS} />,
+      content:
+        'Block distracting websites using tools like Freedom, Cold Turkey, or News Feed Eradicator.',
+    },
+    {
+      icon: <Smartphone className={ICON_CLASS} />,
+      content: 'Remove social media and non-essential apps from your phone.',
+    },
+    {
+      icon: <Mail className={ICON_CLASS} />,
+      content:
+        'Delete email apps from your personal phone to reduce distractions.',
+    },
+    {
+      icon: <Slack className={ICON_CLASS} />,
+      content:
+        'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
+    },
+    {
+      icon: <Gamepad2 className={ICON_CLASS} />,
+      content: 'Remove gaming apps from your phone.',
+    },
+    {
+      icon: <Book className={ICON_CLASS} />,
+      content:
+        'Replace screen time with offline activities like reading, exercise, or learning a new skill.',
+    },
+    {
+      icon: <CreditCard className={ICON_CLASS} />,
+      content:
+        'Disable credit card auto-fill in browsers to prevent impulse purchases.',
+    },
+  ];
+
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
       {/* Hero Section */}
@@ -80,11 +89,12 @@ export default function ModerateDetoxPage() {
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='text-center'>
             <h1 className='text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl'>
-              Easy Detox Strategy
+              <span className={`text-${COLOR_CLASS}`}>Advanced</span> Detox
+              Strategy
             </h1>
             <p className='mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl'>
-              Break free from social media addiction by following these
-              actionable steps. Check off each task as you complete it.
+              Break free completely by following these actionable steps. Check
+              off each task as you complete it.
             </p>
           </div>
         </div>
@@ -94,12 +104,12 @@ export default function ModerateDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {easySteps.map((step, index) => (
+            {steps.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
                   completedSteps[index]
-                    ? 'bg-purple-50 border-purple-200'
+                    ? 'bg-green-50 border-green-200'
                     : 'bg-white border-gray-200'
                 } transition-all`}
               >
@@ -107,7 +117,7 @@ export default function ModerateDetoxPage() {
                   onClick={() => toggleStep(index)}
                   className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                     completedSteps[index]
-                      ? 'bg-purple-600 border-purple-600'
+                      ? 'bg-green-600 border-green-600'
                       : 'bg-white border-purple-600'
                   }`}
                 >
@@ -139,10 +149,10 @@ export default function ModerateDetoxPage() {
           </h2>
           <p className='text-gray-600'>
             You've completed{' '}
-            <span className='font-bold text-purple-600'>
+            <span className='font-bold text-green-600'>
               {completedSteps.filter(Boolean).length}
             </span>{' '}
-            out of {easySteps.length} steps.
+            out of {steps.length} steps.
           </p>
         </div>
       </section>
