@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Trash2,
   Smartphone,
@@ -14,73 +13,77 @@ import {
   CreditCard,
   Gamepad2,
 } from 'lucide-react';
+import { useStartDetoxStore } from '../store';
+import { useShallow } from 'zustand/react/shallow';
+
+const COLOR_CLASS = 'green-600';
+const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
+const advancedSteps = [
+  {
+    uid: 'advanced-step-1',
+    icon: <Trash2 className={ICON_CLASS} />,
+    content: 'Deactivate or permanently delete all social media accounts.',
+  },
+  {
+    uid: 'advanced-step-2',
+    icon: <Chrome className={ICON_CLASS} />,
+    content: 'Use a privacy-focused browser like Firefox and avoid signing in.',
+  },
+  {
+    uid: 'advanced-step-3',
+    icon: <Blocks className={ICON_CLASS} />,
+    content:
+      'Install an ad blocker extension (e.g., AdBlock, uBlock Origin, AdGuard).',
+  },
+  {
+    uid: 'advanced-step-4',
+    icon: <Slash className={ICON_CLASS} />,
+    content:
+      'Block distracting websites using tools like Freedom, Cold Turkey, or News Feed Eradicator.',
+  },
+  {
+    uid: 'advanced-step-5',
+    icon: <Smartphone className={ICON_CLASS} />,
+    content: 'Remove social media and non-essential apps from your phone.',
+  },
+  {
+    uid: 'advanced-step-6',
+    icon: <Mail className={ICON_CLASS} />,
+    content:
+      'Delete email apps from your personal phone to reduce distractions.',
+  },
+  {
+    uid: 'advanced-step-7',
+    icon: <Slack className={ICON_CLASS} />,
+    content:
+      'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
+  },
+  {
+    uid: 'advanced-step-8',
+    icon: <Gamepad2 className={ICON_CLASS} />,
+    content: 'Remove gaming apps from your phone.',
+  },
+  {
+    uid: 'advanced-step-9',
+    icon: <Book className={ICON_CLASS} />,
+    content:
+      'Replace screen time with offline activities like reading, exercise, or learning a new skill.',
+  },
+  {
+    uid: 'advanced-step-10',
+    icon: <CreditCard className={ICON_CLASS} />,
+    content:
+      'Disable credit card auto-fill in browsers to prevent impulse purchases.',
+  },
+];
 
 export default function AdvancedDetoxPage() {
-  const COLOR_CLASS = 'green-600';
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    Array(5).fill(false),
+  const { completedUids, toggleCompletedUid } = useStartDetoxStore(
+    useShallow((state) => ({
+      completedUids: state.completedUids,
+      toggleCompletedUid: state.toggleCompletedUid,
+    })),
   );
-
-  // Toggle completion status of a step
-  const toggleStep = (index: number) => {
-    setCompletedSteps((prev) => {
-      const newSteps = [...prev];
-      newSteps[index] = !newSteps[index];
-      return newSteps;
-    });
-  };
-
-  const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
-
-  const steps = [
-    {
-      icon: <Trash2 className={ICON_CLASS} />,
-      content: 'Deactivate or permanently delete all social media accounts.',
-    },
-    {
-      icon: <Chrome className={ICON_CLASS} />,
-      content:
-        'Use a privacy-focused browser like Firefox and avoid signing in.',
-    },
-    {
-      icon: <Blocks className={ICON_CLASS} />,
-      content:
-        'Install an ad blocker extension (e.g., AdBlock, uBlock Origin, AdGuard).',
-    },
-    {
-      icon: <Slash className={ICON_CLASS} />,
-      content:
-        'Block distracting websites using tools like Freedom, Cold Turkey, or News Feed Eradicator.',
-    },
-    {
-      icon: <Smartphone className={ICON_CLASS} />,
-      content: 'Remove social media and non-essential apps from your phone.',
-    },
-    {
-      icon: <Mail className={ICON_CLASS} />,
-      content:
-        'Delete email apps from your personal phone to reduce distractions.',
-    },
-    {
-      icon: <Slack className={ICON_CLASS} />,
-      content:
-        'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
-    },
-    {
-      icon: <Gamepad2 className={ICON_CLASS} />,
-      content: 'Remove gaming apps from your phone.',
-    },
-    {
-      icon: <Book className={ICON_CLASS} />,
-      content:
-        'Replace screen time with offline activities like reading, exercise, or learning a new skill.',
-    },
-    {
-      icon: <CreditCard className={ICON_CLASS} />,
-      content:
-        'Disable credit card auto-fill in browsers to prevent impulse purchases.',
-    },
-  ];
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
@@ -104,24 +107,24 @@ export default function AdvancedDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {steps.map((step, index) => (
+            {advancedSteps.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
-                  completedSteps[index]
+                  completedUids.includes(step.uid)
                     ? 'bg-green-50 border-green-200'
                     : 'bg-white border-gray-200'
                 } transition-all`}
               >
                 <button
-                  onClick={() => toggleStep(index)}
+                  onClick={() => toggleCompletedUid(step.uid)}
                   className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    completedSteps[index]
+                    completedUids.includes(step.uid)
                       ? 'bg-green-600 border-green-600'
                       : 'bg-white border-purple-600'
                   }`}
                 >
-                  {completedSteps[index] && (
+                  {completedUids.includes(step.uid) && (
                     <Check className='h-4 w-4 text-white' />
                   )}
                 </button>
@@ -129,7 +132,7 @@ export default function AdvancedDetoxPage() {
                   <div className='flex-shrink-0'>{step.icon}</div>
                   <p
                     className={`ml-2 text-gray-700 ${
-                      completedSteps[index] ? 'line-through' : ''
+                      completedUids.includes(step.uid) ? 'line-through' : ''
                     }`}
                   >
                     {step.content}
@@ -150,9 +153,9 @@ export default function AdvancedDetoxPage() {
           <p className='text-gray-600'>
             You've completed{' '}
             <span className='font-bold text-green-600'>
-              {completedSteps.filter(Boolean).length}
+              {completedUids.length}
             </span>{' '}
-            out of {steps.length} steps.
+            out of {advancedSteps.length} steps.
           </p>
         </div>
       </section>

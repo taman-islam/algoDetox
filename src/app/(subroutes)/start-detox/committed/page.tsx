@@ -13,6 +13,8 @@ import {
   StopCircle,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useStartDetoxStore } from '../store';
+import { useShallow } from 'zustand/react/shallow';
 
 const COLOR_CLASS = 'purple-600';
 
@@ -20,12 +22,14 @@ const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
 
 const committedSteps = [
   {
+    uid: 'committed-step-1',
     icon: <Smartphone className={ICON_CLASS} />,
     content: 'Uninstall all social media apps from your phone.',
     details:
       'Removing apps from your phone eliminates easy access and reduces the temptation to scroll mindlessly.',
   },
   {
+    uid: 'committed-step-2',
     icon: <Shield className={ICON_CLASS} />,
     content:
       'Use website blockers to restrict access to social media on your computer.',
@@ -33,6 +37,7 @@ const committedSteps = [
       'Website blockers help you create a distraction-free environment, making it easier to focus on important tasks.',
   },
   {
+    uid: 'committed-step-3',
     icon: <StopCircle className={ICON_CLASS} />,
     content:
       'Use News Feed Eradicator on your browser so you can still use some features but limit your exposure to infinite scrolling.',
@@ -40,12 +45,14 @@ const committedSteps = [
       'News Feed Limiters help you create a distraction-free environment, making it easier to focus on important tasks.',
   },
   {
+    uid: 'committed-step-4',
     icon: <Mail className={ICON_CLASS} />,
     content: 'Remove email apps from your personal phone.',
     details:
       'Deleting email apps from your personal phone reduces distractions and helps you separate work from personal life.',
   },
   {
+    uid: 'committed-step-5',
     icon: <Slack className={ICON_CLASS} />,
     content:
       'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
@@ -53,6 +60,7 @@ const committedSteps = [
       'Keeping work apps off your personal phone helps you maintain boundaries and avoid burnout.',
   },
   {
+    uid: 'committed-step-6',
     icon: <Book className={ICON_CLASS} />,
     content:
       'Replace screen time with offline activities like reading or exercising.',
@@ -60,6 +68,7 @@ const committedSteps = [
       'Replacing digital habits with offline activities improves mental health and helps you develop new, healthier routines.',
   },
   {
+    uid: 'committed-step-7',
     icon: <Calendar className={ICON_CLASS} />,
     content:
       'Schedule specific times for checking email and work-related apps.',
@@ -67,6 +76,7 @@ const committedSteps = [
       'Designating specific times for checking email and work apps helps you stay focused and avoid constant interruptions.',
   },
   {
+    uid: 'committed-step-8',
     icon: <AlertCircle className={ICON_CLASS} />,
     content: (
       <span>
@@ -85,19 +95,12 @@ const committedSteps = [
 ];
 
 export default function ModerateDetoxPage() {
-  // State to track completed steps
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    Array(committedSteps.length).fill(false),
+  const { completedUids, toggleCompletedUid } = useStartDetoxStore(
+    useShallow((state) => ({
+      completedUids: state.completedUids,
+      toggleCompletedUid: state.toggleCompletedUid,
+    })),
   );
-
-  // Toggle completion status of a step
-  const toggleStep = (index: number) => {
-    setCompletedSteps((prev) => {
-      const newSteps = [...prev];
-      newSteps[index] = !newSteps[index];
-      return newSteps;
-    });
-  };
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
@@ -125,20 +128,20 @@ export default function ModerateDetoxPage() {
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
-                  completedSteps[index]
+                  completedUids.includes(step.uid)
                     ? 'bg-purple-50 border-purple-200'
                     : 'bg-white border-gray-200'
                 } transition-all`}
               >
                 <button
-                  onClick={() => toggleStep(index)}
+                  onClick={() => toggleCompletedUid(step.uid)}
                   className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    completedSteps[index]
+                    completedUids.includes(step.uid)
                       ? 'bg-purple-600 border-purple-600'
                       : 'bg-white border-purple-600'
                   }`}
                 >
-                  {completedSteps[index] && (
+                  {completedUids.includes(step.uid) && (
                     <Check className='h-4 w-4 text-white' />
                   )}
                 </button>
@@ -146,7 +149,7 @@ export default function ModerateDetoxPage() {
                   <div className='flex-shrink-0'>{step.icon}</div>
                   <p
                     className={`ml-2 text-gray-700 ${
-                      completedSteps[index] ? 'line-through' : ''
+                      completedUids.includes(step.uid) ? 'line-through' : ''
                     }`}
                   >
                     {step.content}
@@ -167,7 +170,7 @@ export default function ModerateDetoxPage() {
           <p className='text-gray-600'>
             You've completed{' '}
             <span className='font-bold text-purple-600'>
-              {completedSteps.filter(Boolean).length}
+              {completedUids.length}
             </span>{' '}
             out of {committedSteps.length} steps.
           </p>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Check,
   Slash,
@@ -12,18 +11,22 @@ import {
 } from 'lucide-react';
 
 import Link from 'next/link';
+import { useShallow } from 'zustand/react/shallow';
+import { useStartDetoxStore } from '../store';
 
 const COLOR_CLASS = 'blue-600';
 const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
 
 const easySteps = [
   {
+    uid: 'easy-step-1',
     icon: <Slash className={ICON_CLASS} />,
     content: <span>Separate your work and personal devices.</span>,
     details:
       'Use a work-only device for work-related tasks and a personal device for personal use.',
   },
   {
+    uid: 'easy-step-2',
     icon: <Clock className={ICON_CLASS} />,
     content: (
       <span>Set daily app usage timers for social media on your phone.</span>
@@ -32,6 +35,7 @@ const easySteps = [
       'Setting timers helps you become aware of how much time you spend on social media and encourages mindful usage.',
   },
   {
+    uid: 'easy-step-3',
     icon: <Monitor className={ICON_CLASS} />,
     content: (
       <span>
@@ -42,6 +46,7 @@ const easySteps = [
       'Limiting access on your computer reduces temptation and helps you focus on productive tasks.',
   },
   {
+    uid: 'easy-step-4',
     icon: <Bell className={ICON_CLASS} />,
     content: (
       <span>
@@ -53,12 +58,14 @@ const easySteps = [
       'Notifications are a major source of distraction. Turning them off helps you stay focused and reduces interruptions.',
   },
   {
+    uid: 'easy-step-5',
     icon: <Calendar className={ICON_CLASS} />,
     content: <span>Schedule specific times for checking social media.</span>,
     details:
       'Designating specific times for social media helps you avoid constant checking and creates a healthier routine.',
   },
   {
+    uid: 'easy-step-6',
     icon: <AlertCircle className={ICON_CLASS} />,
     content: (
       <span>
@@ -79,19 +86,12 @@ const easySteps = [
 ];
 
 export default function ModerateDetoxPage() {
-  // State to track completed steps
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    Array(5).fill(false),
+  const { completedUids, toggleCompletedUid } = useStartDetoxStore(
+    useShallow((state) => ({
+      completedUids: state.completedUids,
+      toggleCompletedUid: state.toggleCompletedUid,
+    })),
   );
-
-  // Toggle completion status of a step
-  const toggleStep = (index: number) => {
-    setCompletedSteps((prev) => {
-      const newSteps = [...prev];
-      newSteps[index] = !newSteps[index];
-      return newSteps;
-    });
-  };
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-purple-50 to-white'>
@@ -118,20 +118,20 @@ export default function ModerateDetoxPage() {
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
-                  completedSteps[index]
+                  completedUids.includes(step.uid)
                     ? 'bg-purple-50 border-purple-200'
                     : 'bg-white border-gray-200'
                 } transition-all`}
               >
                 <button
-                  onClick={() => toggleStep(index)}
+                  onClick={() => toggleCompletedUid(step.uid)}
                   className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                    completedSteps[index]
+                    completedUids.includes(step.uid)
                       ? 'bg-purple-600 border-purple-600'
                       : 'bg-white border-purple-600'
                   }`}
                 >
-                  {completedSteps[index] && (
+                  {completedUids.includes(step.uid) && (
                     <Check className='h-4 w-4 text-white' />
                   )}
                 </button>
@@ -139,7 +139,7 @@ export default function ModerateDetoxPage() {
                   <div className='flex-shrink-0'>{step.icon}</div>
                   <p
                     className={`ml-2 text-gray-700 ${
-                      completedSteps[index] ? 'line-through' : ''
+                      completedUids.includes(step.uid) ? 'line-through' : ''
                     }`}
                   >
                     {step.content}
@@ -160,7 +160,7 @@ export default function ModerateDetoxPage() {
           <p className='text-gray-600'>
             You've completed{' '}
             <span className='font-bold text-purple-600'>
-              {completedSteps.filter(Boolean).length}
+              {completedUids.length}
             </span>{' '}
             out of {easySteps.length} steps.
           </p>
