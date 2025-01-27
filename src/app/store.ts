@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export const QUIZ_QUESTIONS: {
+const QUIZ_QUESTIONS: {
   question: string;
   answer: number;
 }[] = [
@@ -44,23 +44,37 @@ interface QuizStore {
   setAnswer: (questionIndex: number, answer: number) => void;
   setQuizCompleted: (quizCompleted: boolean) => void;
   calculateQuizScore: () => void;
+  getQuestions: () => {
+    question: string;
+    answer: number;
+  }[];
 }
 
-export const useQuizStore = create<QuizStore>((set) => ({
+export const useQuizStore = create<QuizStore>((set, get) => ({
   quizCompleted: false,
   quizScore: 0,
   questions: QUIZ_QUESTIONS,
-  reset: () =>
-    set({ quizCompleted: false, quizScore: 0, questions: QUIZ_QUESTIONS }),
+  getQuestions: () => get().questions,
+  reset: () => {
+    const newQuestions = QUIZ_QUESTIONS.map((question) => ({
+      ...question,
+      answer: 0,
+    }));
+    set({
+      quizCompleted: false,
+      quizScore: 0,
+      questions: newQuestions,
+    });
+  },
   setQuizCompleted: (quizCompleted: boolean) => set({ quizCompleted }),
   setAnswer: (questionIndex: number, answer: number) => {
-    const newQuestions = [...QUIZ_QUESTIONS];
+    const newQuestions = [...get().questions];
     newQuestions[questionIndex].answer = answer;
     set({ questions: newQuestions });
   },
   calculateQuizScore: () =>
     set({
-      quizScore: QUIZ_QUESTIONS.reduce((acc, question) => {
+      quizScore: get().questions.reduce((acc, question) => {
         return acc + question.answer;
       }, 0),
     }),

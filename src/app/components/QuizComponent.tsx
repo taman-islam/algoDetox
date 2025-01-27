@@ -1,8 +1,12 @@
 'use client';
 
 import { memo, useState } from 'react';
-import { QUIZ_QUESTIONS, useQuizStore } from '../store';
+import { useQuizStore } from '../store';
 import { QuizResults } from './QuizResultComponent';
+import { Button } from '@/components/ui/button';
+import { ArrowLeftIcon } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function QuizComponent() {
   const quizCompleted = useQuizStore((state) => state.quizCompleted);
@@ -17,13 +21,22 @@ export function QuizComponent() {
 
 const QuickQuiz = memo(() => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const setQuizCompleted = useQuizStore((state) => state.setQuizCompleted);
-  const setAnswer = useQuizStore((state) => state.setAnswer);
-  const calculateQuizScore = useQuizStore((state) => state.calculateQuizScore);
+  const { setQuizCompleted, setAnswer, calculateQuizScore } = useQuizStore(
+    useShallow((state) => ({
+      setQuizCompleted: state.setQuizCompleted,
+      setAnswer: state.setAnswer,
+      calculateQuizScore: state.calculateQuizScore,
+    })),
+  );
+  const questions = useQuizStore((state) => state.getQuestions());
+
+  const handlePrevious = () => {
+    setCurrentQuestion((prev) => Math.max(0, prev - 1));
+  };
 
   const handleAnswer = (rating: number) => {
     setAnswer(currentQuestion, rating);
-    if (currentQuestion < QUIZ_QUESTIONS.length - 1) {
+    if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
       setQuizCompleted(true);
@@ -31,43 +44,69 @@ const QuickQuiz = memo(() => {
     }
   };
 
-  const progress = ((currentQuestion + 1) / QUIZ_QUESTIONS.length) * 100;
+  const progress = questions.length
+    ? (currentQuestion / questions.length) * 100
+    : 100;
+
+  const RATNG_LABELS = ['Never', 'Sometimes', 'Always'];
 
   return (
-    <div>
-      {/* Progress Bar */}
-      <div className='w-full bg-gray-200 h-2 rounded-full'>
-        <div
-          className='bg-blue-600 h-2 rounded-full transition-all'
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-
-      {/* Quiz Content */}
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
+    <Card>
+      <CardHeader>
+        <CardTitle>Quiz</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className='w-full bg-gray-200 h-2 rounded-full'>
+          <div
+            className='bg-blue-600 h-2 rounded-full transition-all'
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      </CardContent>
+      <CardContent>
         <h2 className='text-2xl font-bold text-gray-900 mb-8'>
-          {QUIZ_QUESTIONS[currentQuestion].question}
+          {questions[currentQuestion].question}
         </h2>
-        <div className='flex justify-center space-x-2'>
-          {[0, 1, 2, 3, 4, 5].map((rating) => (
-            <button
+        <div className='flex justify-between space-x-2'>
+          {[0, 1, 2].map((rating) => (
+            <div
               key={rating}
-              onClick={() => handleAnswer(rating)}
-              className='flex items-center justify-center w-12 h-12 border border-gray-300 rounded-full text-gray-700 hover:bg-blue-100 hover:border-blue-500 transition-all'
+              className='flex flex-col items-center justify-center'
             >
-              {rating}
-            </button>
+              <button
+                className={`flex items-center justify-center w-12 h-12 border rounded-full transition-all ${
+                  rating === questions[currentQuestion].answer
+                    ? 'bg-blue-100 border-blue-500 text-blue-700'
+                    : 'border-gray-300 text-gray-700 hover:bg-blue-100 hover:border-blue-500'
+                }`}
+                key={rating}
+                onClick={() => handleAnswer(rating)}
+                aria-pressed={rating === questions[currentQuestion].answer}
+              >
+                {rating}
+              </button>
+              <span className='text-sm text-gray-500'>
+                {RATNG_LABELS[rating]}
+              </span>
+            </div>
           ))}
         </div>
-        <div className='mt-4 flex justify-between text-sm text-gray-500'>
-          <span>Never</span>
-          <span>Always</span>
+
+        <div className='flex justify-between mt-4'>
+          <Button
+            onClick={handlePrevious}
+            disabled={currentQuestion === 0}
+            variant='outline'
+          >
+            <ArrowLeftIcon className='w-4 h-4' />
+            Previous
+          </Button>
+          <p className=' text-sm text-gray-500'>
+            Question {currentQuestion + 1} of {questions.length}
+          </p>
         </div>
-        <p className='mt-4 text-sm text-gray-500'>
-          Question {currentQuestion + 1} of {QUIZ_QUESTIONS.length}
-        </p>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 });
 
