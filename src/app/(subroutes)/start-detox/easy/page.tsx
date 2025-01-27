@@ -1,91 +1,15 @@
 'use client';
 
-import {
-  Check,
-  Slash,
-  Clock,
-  Monitor,
-  Bell,
-  Calendar,
-  AlertCircle,
-} from 'lucide-react';
+import { Check } from 'lucide-react';
 
-import Link from 'next/link';
 import { useShallow } from 'zustand/react/shallow';
 import { useStartDetoxStore } from '../store';
+import { EASY_STEPS } from '../Steps';
+import { ProgressTracker } from '../ProgressTracker';
 
 const COLOR_CLASS = 'blue-600';
-const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
 
-const easySteps = [
-  {
-    uid: 'easy-step-1',
-    icon: <Slash className={ICON_CLASS} />,
-    content: <span>Separate your work and personal devices.</span>,
-    details:
-      'Use a work-only device for work-related tasks and a personal device for personal use.',
-  },
-  {
-    uid: 'easy-step-2',
-    icon: <Clock className={ICON_CLASS} />,
-    content: (
-      <span>Set daily app usage timers for social media on your phone.</span>
-    ),
-    details:
-      'Setting timers helps you become aware of how much time you spend on social media and encourages mindful usage.',
-  },
-  {
-    uid: 'easy-step-3',
-    icon: <Monitor className={ICON_CLASS} />,
-    content: (
-      <span>
-        Use browser extensions to limit access to social media on your computer.
-      </span>
-    ),
-    details:
-      'Limiting access on your computer reduces temptation and helps you focus on productive tasks.',
-  },
-  {
-    uid: 'easy-step-4',
-    icon: <Bell className={ICON_CLASS} />,
-    content: (
-      <span>
-        Turn off notifications for non-essential apps. Only allow important
-        notifications from absolutely necessary apps.
-      </span>
-    ),
-    details:
-      'Notifications are a major source of distraction. Turning them off helps you stay focused and reduces interruptions.',
-  },
-  {
-    uid: 'easy-step-5',
-    icon: <Calendar className={ICON_CLASS} />,
-    content: <span>Schedule specific times for checking social media.</span>,
-    details:
-      'Designating specific times for social media helps you avoid constant checking and creates a healthier routine.',
-  },
-  {
-    uid: 'easy-step-6',
-    icon: <AlertCircle className={ICON_CLASS} />,
-    content: (
-      <span>
-        If you find yourself unable to stick to these limits, consider upgrading
-        to the{' '}
-        <Link
-          className='font-medium text-blue-600 hover:text-blue-500'
-          href='/start-detox/committed'
-        >
-          Committed Detox
-        </Link>
-        .
-      </span>
-    ),
-    details:
-      'The Easy Detox is a starting point, but if you struggle to stay within limits, a more committed approach may be necessary.',
-  },
-];
-
-export default function ModerateDetoxPage() {
+export default function EasyDetoxPage() {
   const { completedUids, toggleCompletedUid } = useStartDetoxStore(
     useShallow((state) => ({
       completedUids: state.completedUids,
@@ -114,7 +38,7 @@ export default function ModerateDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {easySteps.map((step, index) => (
+            {EASY_STEPS.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
@@ -152,20 +76,7 @@ export default function ModerateDetoxPage() {
       </section>
 
       {/* Progress Section */}
-      <section className='py-12'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-2xl font-bold text-gray-900 mb-4'>
-            Your Progress
-          </h2>
-          <p className='text-gray-600'>
-            You've completed{' '}
-            <span className='font-bold text-purple-600'>
-              {completedUids.length}
-            </span>{' '}
-            out of {easySteps.length} steps.
-          </p>
-        </div>
-      </section>
+      <ProgressTracker steps={EASY_STEPS} />
     </div>
   );
 }

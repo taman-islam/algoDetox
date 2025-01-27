@@ -1,98 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import {
-  Smartphone,
-  Mail,
-  Book,
-  Check,
-  Slack,
-  Shield,
-  Calendar,
-  AlertCircle,
-  StopCircle,
-} from 'lucide-react';
-import Link from 'next/link';
+import { Check } from 'lucide-react';
 import { useStartDetoxStore } from '../store';
 import { useShallow } from 'zustand/react/shallow';
+import { ProgressTracker } from '../ProgressTracker';
+import { COMMITTED_STEPS } from '../Steps';
 
 const COLOR_CLASS = 'purple-600';
-
-const ICON_CLASS = `h-6 w-6 text-${COLOR_CLASS}`;
-
-const committedSteps = [
-  {
-    uid: 'committed-step-1',
-    icon: <Smartphone className={ICON_CLASS} />,
-    content: 'Uninstall all social media apps from your phone.',
-    details:
-      'Removing apps from your phone eliminates easy access and reduces the temptation to scroll mindlessly.',
-  },
-  {
-    uid: 'committed-step-2',
-    icon: <Shield className={ICON_CLASS} />,
-    content:
-      'Use website blockers to restrict access to social media on your computer.',
-    details:
-      'Website blockers help you create a distraction-free environment, making it easier to focus on important tasks.',
-  },
-  {
-    uid: 'committed-step-3',
-    icon: <StopCircle className={ICON_CLASS} />,
-    content:
-      'Use News Feed Eradicator on your browser so you can still use some features but limit your exposure to infinite scrolling.',
-    details:
-      'News Feed Limiters help you create a distraction-free environment, making it easier to focus on important tasks.',
-  },
-  {
-    uid: 'committed-step-4',
-    icon: <Mail className={ICON_CLASS} />,
-    content: 'Remove email apps from your personal phone.',
-    details:
-      'Deleting email apps from your personal phone reduces distractions and helps you separate work from personal life.',
-  },
-  {
-    uid: 'committed-step-5',
-    icon: <Slack className={ICON_CLASS} />,
-    content:
-      'Remove work-related apps like Slack and Microsoft Teams from your personal phone.',
-    details:
-      'Keeping work apps off your personal phone helps you maintain boundaries and avoid burnout.',
-  },
-  {
-    uid: 'committed-step-6',
-    icon: <Book className={ICON_CLASS} />,
-    content:
-      'Replace screen time with offline activities like reading or exercising.',
-    details:
-      'Replacing digital habits with offline activities improves mental health and helps you develop new, healthier routines.',
-  },
-  {
-    uid: 'committed-step-7',
-    icon: <Calendar className={ICON_CLASS} />,
-    content:
-      'Schedule specific times for checking email and work-related apps.',
-    details:
-      'Designating specific times for checking email and work apps helps you stay focused and avoid constant interruptions.',
-  },
-  {
-    uid: 'committed-step-8',
-    icon: <AlertCircle className={ICON_CLASS} />,
-    content: (
-      <span>
-        If you still find yourself distracted, consider upgrading to the{' '}
-        <Link
-          href='/start-detox/advanced'
-          className='font-medium text-blue-600 hover:text-blue-500'
-        >
-          Advanced Detox.
-        </Link>{' '}
-      </span>
-    ),
-    details:
-      'The Committed Detox is effective for many, but if you need a more drastic change, the Advanced Detox may be the right choice.',
-  },
-];
 
 export default function ModerateDetoxPage() {
   const { completedUids, toggleCompletedUid } = useStartDetoxStore(
@@ -124,7 +38,7 @@ export default function ModerateDetoxPage() {
       <section className='py-8'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='space-y-6'>
-            {committedSteps.map((step, index) => (
+            {COMMITTED_STEPS.map((step, index) => (
               <div
                 key={index}
                 className={`flex items-start p-6 rounded-lg shadow-sm border ${
@@ -162,20 +76,7 @@ export default function ModerateDetoxPage() {
       </section>
 
       {/* Progress Section */}
-      <section className='py-12'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-          <h2 className='text-2xl font-bold text-gray-900 mb-4'>
-            Your Progress
-          </h2>
-          <p className='text-gray-600'>
-            You've completed{' '}
-            <span className='font-bold text-purple-600'>
-              {completedUids.length}
-            </span>{' '}
-            out of {committedSteps.length} steps.
-          </p>
-        </div>
-      </section>
+      <ProgressTracker steps={COMMITTED_STEPS} />
     </div>
   );
 }
