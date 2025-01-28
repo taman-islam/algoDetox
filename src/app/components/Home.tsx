@@ -174,9 +174,10 @@ const JoinTheMission = memo(() => {
             <Button
               variant='outline'
               className='text-blue-600 border-blue-600 hover:bg-blue-50'
-              disabled
             >
-              Github link coming soon
+              <Link href='https://github.com/taman-islam/algoDetox'>
+                Github
+              </Link>
             </Button>
           </div>
 
