@@ -2,11 +2,8 @@
 
 import Link from 'next/link';
 import { Brain } from 'lucide-react';
-import { useAuthStore } from '@/lib/store';
 
 export function Navbar() {
-  const { isLoggedIn, logout } = useAuthStore();
-
   return (
     <nav className='bg-white shadow-sm'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -20,6 +17,12 @@ export function Navbar() {
             </Link>
           </div>
           <div className='flex items-center space-x-4'>
+            <Link
+              href='/meditate'
+              className='text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium'
+            >
+              Meditate
+            </Link>
             <Link
               href='/platforms'
               className='text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium'
