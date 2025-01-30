@@ -45,6 +45,9 @@ export default function MeditatePage() {
   const [currentBackground, setCurrentBackground] = useState('');
   const [timeRemaining, setTimeRemaining] = useState(MEDITATION_TIME);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [audioControl, setAudioControl] = useState<
+    HTMLAudioElement | undefined
+  >();
 
   useEffect(() => {
     setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -57,6 +60,13 @@ export default function MeditatePage() {
       ],
     );
   }, []);
+
+  const muteUnmuteAudio = () => {
+    console.log(audioControl);
+    if (audioControl) {
+      audioControl.muted = !audioControl.muted;
+    }
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -111,6 +121,7 @@ export default function MeditatePage() {
     );
     audio.loop = true;
     audio.play();
+    setAudioControl(audio);
     return () => {
       audio.pause();
       audio.currentTime = 0;
@@ -147,13 +158,21 @@ export default function MeditatePage() {
             />
           </motion.div>
         </AnimatePresence>
-        <Button
-          onClick={loadNewQuote}
-          disabled={isTransitioning}
-          className='mt-8 bg-white/20 hover:bg-white/30 text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1'
-        >
-          New Quote
-        </Button>
+        <div className='flex  items-center justify-center gap-4'>
+          <Button
+            onClick={loadNewQuote}
+            disabled={isTransitioning}
+            className='mt-8 bg-white/20 hover:bg-white/30 text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1'
+          >
+            New Quote
+          </Button>
+          <Button
+            onClick={muteUnmuteAudio}
+            className={`mt-8 ${audioControl?.muted ? 'bg-red-400/20 hover:bg-red-400/30' : 'bg-white/20 hover:bg-white/30'} text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1`}
+          >
+            {audioControl?.muted ? 'Unmute' : 'Mute'} Audio
+          </Button>
+        </div>
         <BreathingCircle />
       </div>
     </div>
