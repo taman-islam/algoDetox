@@ -12,6 +12,16 @@ import {
   type BreathingInstruction,
 } from './BreathingInstructions';
 
+const AUDIO_PATHS = [
+  '/music/somnia_1.mp3',
+  '/music/somnia_10.mp3',
+  '/music/somnia_2.mp3',
+  '/music/somnia_3.mp3',
+  '/music/somnia_7.mp3',
+  '/music/somnia_8.mp3',
+  '/music/somnia_9.mp3',
+];
+
 const backgroundGradients = [
   'linear-gradient(to right bottom, #d7e8ff, #b0d4ff, #86c0ff, #55abff, #0095ff)',
   'linear-gradient(to right bottom, #ffecd2, #fcb69f, #fca184, #ff8a6a, #ff7251)',
@@ -23,6 +33,8 @@ const backgroundGradients = [
   'linear-gradient(to right bottom, #fffae3, #f7ebc7, #edd9a7, #e2c888, #d7b76a)', // Golden glow (peaceful sunrise)
 ];
 
+const MEDITATION_TIME = 300; // 5 minutes in seconds
+
 export default function MeditatePage() {
   const [currentQuote, setCurrentQuote] = useState<Quote>({
     quote: '',
@@ -31,7 +43,7 @@ export default function MeditatePage() {
   const [currentBreathingInstruction, setCurrentBreathingInstruction] =
     useState<BreathingInstruction>(getRandomBreathingInstruction());
   const [currentBackground, setCurrentBackground] = useState('');
-  const [timeRemaining, setTimeRemaining] = useState(300); // 5 minutes in seconds
+  const [timeRemaining, setTimeRemaining] = useState(MEDITATION_TIME);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
@@ -83,10 +95,27 @@ export default function MeditatePage() {
         ],
       );
       setCurrentBreathingInstruction(getRandomBreathingInstruction());
-      setTimeRemaining(300);
+      setTimeRemaining(MEDITATION_TIME);
       setIsTransitioning(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    const audio = new Audio(
+      AUDIO_PATHS[
+        Math.min(
+          Math.floor(Math.random() * AUDIO_PATHS.length),
+          AUDIO_PATHS.length - 1,
+        )
+      ],
+    );
+    audio.loop = true;
+    audio.play();
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
 
   return (
     <div className='relative min-h-screen overflow-hidden'>
