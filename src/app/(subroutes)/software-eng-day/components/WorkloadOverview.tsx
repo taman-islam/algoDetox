@@ -2,24 +2,40 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { AlertCircle, CheckCircle, Coffee } from 'lucide-react';
 import type { Task } from '@/app/(subroutes)/software-eng-day/task';
-import { calculateTimeInMinutes, calculateCognitiveLoad } from '../utlis';
+import {
+  calculateTimeInMinutes,
+  calculateCognitiveLoad,
+  COGNITIVE_WEIGHTS,
+  interpretCognitiveLoad,
+} from '../utlis';
+import { useState, useEffect } from 'react';
 
 interface WorkloadOverviewProps {
   tasks: Task[];
 }
 const MAX_WORK_HOURS = 8;
-const MAX_COGNITIVE_LOAD = 6;
 
 export function WorkloadOverview({ tasks }: WorkloadOverviewProps) {
   const taskMinutes = tasks.reduce((total, task) => {
     return total + calculateTimeInMinutes(task.timeEstimate);
   }, 0);
+  const [cognitiveLoad, setCognitiveLoad] = useState(0);
+  const [cognitiveLoadColor, setCognitiveLoadColor] = useState('bg-green-600');
+  const [cognitiveLoadMessage, setCognitiveLoadMessage] = useState('');
+
+  useEffect(() => {
+    const cl = calculateCognitiveLoad(tasks);
+    const { textColor, message } = interpretCognitiveLoad(cl);
+    setCognitiveLoadMessage(message);
+    setCognitiveLoadColor(textColor);
+    setCognitiveLoad(cl);
+  }, [tasks]);
 
   const remainingMinutes = MAX_WORK_HOURS * 60 - taskMinutes;
   const capacityPercentage = (taskMinutes / MAX_WORK_HOURS / 60) * 100;
-  const cognitiveLoad = calculateCognitiveLoad(tasks);
 
-  const cognitiveLoadPercentage = (cognitiveLoad / MAX_COGNITIVE_LOAD) * 100; // Assuming 15 is the maximum cognitive load
+  const cognitiveLoadPercentage =
+    (cognitiveLoad * 100) / COGNITIVE_WEIGHTS.MAX_COGNITIVE_LOAD;
 
   return (
     <Card className='mb-8'>
@@ -58,27 +74,16 @@ export function WorkloadOverview({ tasks }: WorkloadOverviewProps) {
           <div>
             <h3 className='text-lg font-semibold mb-2'>Cognitive Load</h3>
             <Progress
-              className='mb-2'
+              className={`mb-2 `}
+              value={cognitiveLoadPercentage}
+              color={`bg-${cognitiveLoadColor}`}
             />
             <p className='text-sm mb-2'>
-              Load Score: {cognitiveLoad.toFixed(1)} / {MAX_COGNITIVE_LOAD}
+              Load Score: {cognitiveLoadPercentage.toFixed(1)}%
             </p>
-            {cognitiveLoad >= MAX_COGNITIVE_LOAD * 0.95 ? (
-              <div className='flex items-center text-red-600 text-sm'>
-                <AlertCircle className='mr-2 h-4 w-4 text-red-600' />
-                <p>Very high cognitive load</p>
-              </div>
-            ) : cognitiveLoad >= MAX_COGNITIVE_LOAD * 0.8 ? (
-              <div className='flex items-center text-yellow-600 text-sm'>
-                <AlertCircle className='mr-2 h-4 w-4 text-yellow-600' />
-                <p>High cognitive load</p>
-              </div>
-            ) : cognitiveLoad >= MAX_COGNITIVE_LOAD * 0.6 ? (
-              <div className='flex items-center text-yellow-600 text-sm'>
-                <AlertCircle className='mr-2 h-4 w-4 text-yellow-400' />
-                <p>High cognitive load</p>
-              </div>
-            ) : null}
+            <p className={`text-${cognitiveLoadColor} text-sm`}>
+              {cognitiveLoadMessage}
+            </p>
           </div>
         </div>
         <div className='flex items-center text-green-600 mt-4'>
