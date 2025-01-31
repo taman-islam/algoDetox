@@ -1,13 +1,15 @@
 import type { Task } from './task';
 
 // Constants for cognitive load weights
-const COGNITIVE_WEIGHTS: any = {
+export const COGNITIVE_WEIGHTS: any = {
   // Base energy requirements
   ENERGY_LEVELS: {
     high: 2.0,
     medium: 1.0,
     low: 0.5,
   },
+
+  MAX_COGNITIVE_LOAD: 10.0,
 
   // Context switching cost (gets higher with more tasks)
   CONTEXT_SWITCH_MULTIPLIER: 0.2,
@@ -30,54 +32,76 @@ const COGNITIVE_WEIGHTS: any = {
     afternoon: 1.2, // More tired
     evening: 1.5, // Should be winding down
   },
+
+  URGENT_MULTIPLIER: 1.3,
 };
 
 const MAX_COGNITIVE_LOAD = 10.0; // Upper bound for daily cognitive load
 
-export const calculateCognitiveLoad = (tasks: Task[]): number => {
+export const calculateCognitiveLoad = (tasks: Task[]) => {
   let totalLoad = 0;
-  let highEnergyWorkMinutes = 0;
+  let contextSwitches = 0;
+  let previousEnergy: string | null = null;
 
-  tasks.forEach((task, index) => {
-    let taskLoad = COGNITIVE_WEIGHTS.ENERGY_LEVELS[task.energyRequirement];
-    const taskDuration = calculateTimeInMinutes(task.timeEstimate);
+  tasks.forEach((task) => {
+    // Parse task duration to hours
+    const taskHours = calculateTimeInMinutes(task.timeEstimate) / 60;
 
-    // **Track cumulative high-energy work**
-    if (task.energyRequirement === 'high') {
-      highEnergyWorkMinutes += taskDuration;
-    }
+    // Base load scaled by duration
+    let taskLoad =
+      COGNITIVE_WEIGHTS.ENERGY_LEVELS[task.energyRequirement] * taskHours;
 
-    // **Apply Fatigue Multiplier**
-    if (highEnergyWorkMinutes > 120) {
-      taskLoad *= 1.5; // 50% increase after 2 hours
+    // Track context switches between different energy levels
+    if (previousEnergy !== null && previousEnergy !== task.energyRequirement) {
+      contextSwitches++;
     }
-    if (highEnergyWorkMinutes > 180) {
-      taskLoad *= 2; // 100% increase after 3 hours
-    }
-    if (highEnergyWorkMinutes > 240) {
-      taskLoad *= 3; // Extreme exhaustion after 4 hours
-    }
+    previousEnergy = task.energyRequirement;
 
-    // **Context Switch Cost**
-    if (index > 0) {
-      const contextMultiplier = Math.pow(1.1, index);
-      taskLoad +=
-        contextMultiplier * COGNITIVE_WEIGHTS.CONTEXT_SWITCH_MULTIPLIER;
+    // Recovery time proportional to task duration
+    const recoveryLoad = (task.recoveryTime * taskHours) / 60;
+    taskLoad += recoveryLoad;
+
+    // Apply urgent task multiplier
+    if (task.urgent) {
+      taskLoad *= COGNITIVE_WEIGHTS.URGENT_MULTIPLIER;
     }
 
     totalLoad += taskLoad;
   });
 
-  return totalLoad;
+  // Add context switching penalty
+  totalLoad += contextSwitches * COGNITIVE_WEIGHTS.CONTEXT_SWITCH_MULTIPLIER;
+
+  return Math.round(totalLoad * 100) / 100; // Round to 2 decimal places
 };
 
 export const interpretCognitiveLoad = (load: number) => {
-  if (load < 5) return { risk: 'low', message: 'Healthy workload' };
-  if (load < 8)
-    return { risk: 'medium', message: 'Moderate load - consider breaks' };
+  if (load < COGNITIVE_WEIGHTS.MAX_COGNITIVE_LOAD * 0.75)
+    return {
+      textColor: 'green-600',
+      risk: 'low',
+      message: "Great job! You're working at a sustainable pace. Keep it up!",
+      withinLimit: true,
+    };
+  if (load < COGNITIVE_WEIGHTS.MAX_COGNITIVE_LOAD * 0.9)
+    return {
+      textColor: 'yellow-600',
+      risk: 'medium',
+      message: "You're doing well! Consider a short break to stay sharp.",
+      withinLimit: true,
+    };
+  if (load <= COGNITIVE_WEIGHTS.MAX_COGNITIVE_LOAD)
+    return {
+      textColor: 'orange-600',
+      risk: 'high',
+      message: "You've reached your limit—take a well-earned break!",
+      withinLimit: false,
+    };
   return {
-    risk: 'high',
-    message: 'High cognitive load - reduce tasks or spread them out',
+    textColor: 'red-600',
+    risk: 'critical',
+    message: "You're overworking—prioritize rest and recharge!",
+    withinLimit: false,
   };
 };
 
