@@ -37,23 +37,30 @@ const backgroundGradients = [
 const MEDITATION_TIME = 300; // 5 minutes in seconds
 
 export default function MeditatePage() {
-  const initialQuote: Quote = quotes[Math.floor(Math.random() * quotes.length)];
-  const initialBreathingInstruction: BreathingInstruction = getRandomBreathingInstruction();
-  const initialBackgroundIndex = Math.min(
-    Math.floor(Math.random() * backgroundGradients.length),
-    backgroundGradients.length - 1,
-  );
-  const initialBackground = backgroundGradients[initialBackgroundIndex];
-
-  const [currentQuote, setCurrentQuote] = useState<Quote>(initialQuote);
+  const [currentQuote, setCurrentQuote] = useState<Quote>({
+    quote: '',
+    source: '',
+  });
   const [currentBreathingInstruction, setCurrentBreathingInstruction] =
-    useState<BreathingInstruction>(initialBreathingInstruction);
-  const [currentBackground, setCurrentBackground] = useState(initialBackground);
+    useState<BreathingInstruction>(getRandomBreathingInstruction());
+  const [currentBackground, setCurrentBackground] = useState('');
   const [timeRemaining, setTimeRemaining] = useState(MEDITATION_TIME);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    setCurrentBackground(
+      backgroundGradients[
+        Math.min(
+          Math.floor(Math.random() * backgroundGradients.length),
+          backgroundGradients.length - 1,
+        )
+      ],
+    );
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -118,13 +125,15 @@ export default function MeditatePage() {
             )
           ];
       } while (newQuote.quote === currentQuote.quote);
-
-      const newBackgroundIndex = Math.min(
-        Math.floor(Math.random() * backgroundGradients.length),
-        backgroundGradients.length - 1,
-      );
       setCurrentQuote(newQuote);
-      setCurrentBackground(backgroundGradients[newBackgroundIndex]);
+      setCurrentBackground(
+        backgroundGradients[
+          Math.min(
+            Math.floor(Math.random() * backgroundGradients.length),
+            backgroundGradients.length - 1,
+          )
+        ],
+      );
       setCurrentBreathingInstruction(getRandomBreathingInstruction());
       setTimeRemaining(MEDITATION_TIME);
       setIsTransitioning(false);
