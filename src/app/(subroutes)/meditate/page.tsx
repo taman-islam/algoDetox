@@ -167,6 +167,8 @@ export default function MeditatePage() {
               source={currentQuote.source}
               breathingInstruction={currentBreathingInstruction}
               timeRemaining={timeRemaining}
+              isPlaying={isPlaying}
+              togglePlay={togglePlay}
             />
           </motion.div>
         </AnimatePresence>
@@ -177,18 +179,6 @@ export default function MeditatePage() {
             className='mt-8 bg-white/20 hover:bg-white/30 text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1'
           >
             New Quote
-          </Button>
-          <Button
-            onClick={togglePlay}
-            className='mt-8 bg-white/20 hover:bg-white/30 text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1'
-          >
-            {isPlaying ? <PauseIcon /> : <PlayIcon />}
-          </Button>
-          <Button
-            onClick={toggleMute}
-            className={`mt-8 ${isMuted ? 'bg-red-400/20 hover:bg-red-400/30' : 'bg-white/20 hover:bg-white/30'} text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1`}
-          >
-            {isMuted ? <VolumeX /> : <Volume2 />}
           </Button>
         </div>
         <BreathingCircle />
