@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { QuoteDisplay } from './components/QuoteDisplay';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BreathingCircle } from './components/BreathingCircle';
+import { PlayIcon, PauseIcon, Volume2, VolumeX } from 'lucide-react';
 
 import { quotes, type Quote } from './Quotes';
 import {
@@ -45,9 +46,9 @@ export default function MeditatePage() {
   const [currentBackground, setCurrentBackground] = useState('');
   const [timeRemaining, setTimeRemaining] = useState(MEDITATION_TIME);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [audioControl, setAudioControl] = useState<
-    HTMLAudioElement | undefined
-  >();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -61,12 +62,41 @@ export default function MeditatePage() {
     );
   }, []);
 
-  const muteUnmuteAudio = () => {
-    console.log(audioControl);
-    if (audioControl) {
-      audioControl.muted = !audioControl.muted;
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
   };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  useEffect(() => {
+    const audio = new Audio(
+      AUDIO_PATHS[
+        Math.min(
+          Math.floor(Math.random() * AUDIO_PATHS.length),
+          AUDIO_PATHS.length - 1,
+        )
+      ],
+    );
+    audio.loop = true;
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -110,24 +140,6 @@ export default function MeditatePage() {
     }, 1000);
   };
 
-  useEffect(() => {
-    const audio = new Audio(
-      AUDIO_PATHS[
-        Math.min(
-          Math.floor(Math.random() * AUDIO_PATHS.length),
-          AUDIO_PATHS.length - 1,
-        )
-      ],
-    );
-    audio.loop = true;
-    audio.play();
-    setAudioControl(audio);
-    return () => {
-      audio.pause();
-      audio.currentTime = 0;
-    };
-  }, []);
-
   return (
     <div className='relative min-h-screen overflow-hidden'>
       <AnimatePresence mode='wait'>
@@ -155,6 +167,8 @@ export default function MeditatePage() {
               source={currentQuote.source}
               breathingInstruction={currentBreathingInstruction}
               timeRemaining={timeRemaining}
+              isPlaying={isPlaying}
+              togglePlay={togglePlay}
             />
           </motion.div>
         </AnimatePresence>
@@ -165,12 +179,6 @@ export default function MeditatePage() {
             className='mt-8 bg-white/20 hover:bg-white/30 text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1'
           >
             New Quote
-          </Button>
-          <Button
-            onClick={muteUnmuteAudio}
-            className={`mt-8 ${audioControl?.muted ? 'bg-red-400/20 hover:bg-red-400/30' : 'bg-white/20 hover:bg-white/30'} text-gray-800 font-semibold py-2 px-6 rounded-full transition-all duration-300 backdrop-blur-sm shadow-md hover:shadow-lg transform hover:-translate-y-1`}
-          >
-            {audioControl?.muted ? 'Unmute' : 'Mute'} Audio
           </Button>
         </div>
         <BreathingCircle />
